@@ -1,0 +1,29 @@
+﻿<Properties StartupItem="Assembly-CSharp.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\PlayerController.cs">
+    <Files>
+      <File FileName="Assets\Scripts\Test\Orbits.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Spaceship.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Quest\QuestPage.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Quest\QuestProcessor.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\GameManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\InputController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Planet.cs" Line="65" Column="3" />
+      <File FileName="Assets\Scripts\UI\QuestPanel.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\UI\UIController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\GameOverStupid.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\UI\RPGUI.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\PlayerParameters.cs" Line="5" Column="1" />
+      <File FileName="Assets\Scripts\Finish.cs" Line="21" Column="32" />
+      <File FileName="Assets\Scripts\PlayerController.cs" Line="34" Column="3" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="D:\Projects\Ginger Space\Assets\Scripts\UI\QuestPanel.cs" line="62" column="22" />
+      <Breakpoint file="D:\Projects\Ginger Space\Assets\Scripts\UI\UIController.cs" line="75" column="1" />
+      <Breakpoint file="D:\Projects\Ginger Space\Assets\Scripts\UI\PlanetExploreResult.cs" line="72" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
