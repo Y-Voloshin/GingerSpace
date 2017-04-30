@@ -3,9 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Catopus.Model;
 
 public class Spaceship : MonoBehaviour {	
 	public static Spaceship Instance;
+
 
 	[SerializeField]
 	float Speed = 2;
@@ -20,14 +22,17 @@ public class Spaceship : MonoBehaviour {
 
 	public SpaceShipState State;
 
-	[SerializeField]
-	float fallingAngle;
-	[SerializeField]
-	Vector3 fallingAngleV3;
-	[SerializeField]
-	float fav3Magnitude;
-	[SerializeField]
-	float fallingDist;
+    [SerializeField]
+    SpaceshipModel CurrentModel, InitModel, SaveModel;
+
+	//[SerializeField]
+	//float fallingAngle;
+	//[SerializeField]
+	//Vector3 fallingAngleV3;
+	//[SerializeField]
+	//float fav3Magnitude;
+	//[SerializeField]
+	//float fallingDist;
 
 	// Use this for initialization
 	void Start () {
@@ -63,7 +68,7 @@ public class Spaceship : MonoBehaviour {
 		case SpaceShipState.Falling:
 			var moveStep = myTransform.right * Speed * Time.deltaTime;
 			myTransform.Translate (moveStep);
-			fallingAngleV3 = Quaternion.FromToRotation (myTransform.right, planetTransform.position - myTransform.position).eulerAngles;
+			var fallingAngleV3 = Quaternion.FromToRotation (myTransform.right, planetTransform.position - myTransform.position).eulerAngles;
 			//fallingAngle = Vector3.Angle (myTransform.right, planet.position - myTransform.position);
 			if (fallingAngleV3.z > 200)
 				fallingAngleV3.z = fallingAngleV3.z - 360;
@@ -72,7 +77,7 @@ public class Spaceship : MonoBehaviour {
 				myTransform.Rotate (fallingAngleV3 * 0.3f * Time.deltaTime);
 			else
 				myTransform.Rotate (myTransform.forward, Quaternion.FromToRotation (myTransform.right, planetTransform.position - myTransform.position).eulerAngles.z);
-			fallingDist = Vector3.Distance (myTransform.position, planetTransform.position);
+			var fallingDist = Vector3.Distance (myTransform.position, planetTransform.position);
 			if (fallingDist < moveStep.magnitude)
 				State = SpaceShipState.Dead;
 			break;
