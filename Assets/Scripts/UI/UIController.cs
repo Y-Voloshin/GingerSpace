@@ -145,6 +145,16 @@ namespace Catopus.UI
             Spaceship.Instance.Save();
         }
 
+        public void LoadGame()
+        {
+            Spaceship.Instance.Load();
+        }
+
+        public void RestartGame()
+        {
+            Spaceship.Instance.LoadInit();
+        }
+
         #endregion
     }
 
