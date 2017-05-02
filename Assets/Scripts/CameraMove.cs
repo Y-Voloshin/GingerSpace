@@ -8,7 +8,7 @@ public class CameraMove : MonoBehaviour {
 			ship;
 	// Use this for initialization
 	void Start () {
-		ship = GameObject.FindObjectOfType<Spaceship> ().transform;
+		ship = GameObject.FindObjectOfType<Catopus.Spaceship> ().transform;
 		if (ship == null)
 			enabled = false;
 
