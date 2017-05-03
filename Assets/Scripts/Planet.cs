@@ -2,58 +2,59 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Catopus.UI;
+using VGF;
+using Catopus.Model;
 
 namespace Catopus
 {
-    public class Planet : MonoBehaviour
+    public class Planet : GenericModelBehaviour<PlanetModel>
     {
         public static Planet Current;
         static Planet[] All;
-        public float Radius;
+
+        public float Radius { get { return CurrentModel.Radius; } }
         #region common parameters
-        public int Level = 1;
+        public int Level { get { return CurrentModel.Level; } }
         /// <summary>
         /// The observed. Была ли планета найдена
         /// </summary>
-        public bool Observed,
-                /// <summary>
-                /// The visited. Была ли планета посещена? Планету можно посетить один раз.
-                /// </summary>
-                Visited,
-                    HasPopulation,
-                    HasResources;
+        public bool Observed { get { return CurrentModel.Observed; } }
+        /// <summary>
+        /// The visited. Была ли планета посещена? Планету можно посетить один раз.
+        /// </summary>
+        public bool Visited { get { return CurrentModel.Visited; } }
+        public bool HasPopulation { get { return CurrentModel.HasPopulation; } }
+        public bool HasResources { get { return CurrentModel.HasResources; } }
         #endregion
 
         #region quest parameters
-        Reward Reward = new Reward();
-        public bool HasQuest,
-                    QuestCompleeted;
+        //згидшс Reward Reward { get { return CurrentModel.Reward; } }
+        public bool HasQuest { get { return CurrentModel.HasQuest; } }
+        public bool QuestCompleted { get { return CurrentModel.QuestCompleted; } }
 
-        public int QuestId;
-        #endregion
+        public int QuestId { get { return CurrentModel.QuestId; } }
+#endregion
 
-        #region check point
+#region check point
 
-        #endregion
+#endregion
 
-        void Awake()
+
+//TODO: refactor all planets list
+protected override void Awake()
         {
             All = null;
+            base.Awake();
         }
 
         // Use this for initialization
-        void Start()
+        protected override void Start()
         {
             //HasQuest = true;
             if (All == null)
                 All = FindObjectsOfType<Planet>();
         }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
+        
 
         public void OnPlanetOrbitListener()
         {
@@ -68,14 +69,14 @@ namespace Catopus
         {
             if (Observed)
                 return;
-            Observed = true;
+            CurrentModel.Observed = true;
         }
 
         public void VisitPlanet()
         {
-            if (PlayerController.Instance.Parameters.FuelCurrent <= 0)
+            if (!PlayerController.Instance.TryTakeFuel(1))
                 return;
-            PlayerController.Instance.Parameters.FuelCurrent--;
+
             UIController.UpdateShipInfo();
 
             if (Visited)
@@ -83,7 +84,7 @@ namespace Catopus
                 Debug.LogError("Trying visit planet which is already visited");
                 return;
             }
-            Visited = true;
+            CurrentModel.Visited = true;
             if (HasQuest)
             {
                 UIController.ShowQuest(QuestId);
@@ -98,11 +99,11 @@ namespace Catopus
                 }
                 else
                 {
-                    Reward = GenerateResources();
-                    if (!Reward.IsEmpty)
-                        PlayerController.Instance.ApplyReward(Reward);
+                    CurrentModel.Reward = GenerateResources();
+                    if (!CurrentModel.Reward.IsEmpty)
+                        PlayerController.Instance.ApplyReward(CurrentModel.Reward);
 
-                    UIController.ShowReward(Reward);
+                    UIController.ShowReward(CurrentModel.Reward);
 
                 }
             }
@@ -116,7 +117,7 @@ namespace Catopus
 
         public static Planet GetClosest()
         {
-            if (All == null || All.Length == null)
+            if (All == null || All.Length == 0)
                 return null;
             Vector3 shipPos = Spaceship.Instance.transform.position;
             float dist = Vector3.Distance(All[0].transform.position, shipPos);
@@ -152,6 +153,16 @@ namespace Catopus
             ship.Rotate(Vector3.forward, angle);
         }
 
+        public void SetRadius(float r)
+        {
+            CurrentModel.Radius = r;
+        }
+
+        public void Observe()
+        {
+            CurrentModel.Observed = true;
+        }
+
         #region resources generation
 
 
@@ -163,8 +174,7 @@ namespace Catopus
 
             Reward result = new Reward();
             //min fuel + planet level fuel + exploration fuel
-            int fuel = 2 + Random.Range(0, Level + PlayerController.Instance.Parameters.ExplorationCurrent + 1);
-            fuel = Mathf.Min(fuel, PlayerController.Instance.Parameters.EmptyFuelPoints);
+            int fuel = 2 + Random.Range(0, Level + PlayerController.Instance.ExplorationCurrent + 1);
 
             result.IsEmpty = false;
             result.Fuel = fuel;

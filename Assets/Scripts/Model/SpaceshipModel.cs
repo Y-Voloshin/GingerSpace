@@ -32,14 +32,18 @@ namespace Catopus.Model
 
         public SpaceShipState State;
         public int PlanetId;
-        public float Speed, AngleSpeed;
+        public float Speed, AngularSpeed;
 
         public SpaceshipModel() { }
 
+
+        //NOTE: remove later if unnecessary
+        /* current commit is 4
         public SpaceshipModel(Vector3 pos, Quaternion rot, float speed, SpaceShipState s = SpaceShipState.Idle, float aSpeed = 0, int pId = -1)
         {
             SetValues(pos, rot, speed, s, aSpeed, pId);
         }
+        */
 
         public SpaceshipModel(SpaceshipModel model)
         {
@@ -48,22 +52,16 @@ namespace Catopus.Model
 
         public override void SetValues(SpaceshipModel model)
         {
-            Debug.Log(model);
-            Debug.Log(this);
             if (model == null)
                 return;
-            SetValues(model.Position, model.Rotation, model.Speed, model.State, model.AngleSpeed, model.PlanetId);
-        }
+            
+            Position = model.Position;
+            Rotation = model.Rotation;
 
-        public void SetValues(Vector3 pos, Quaternion rot, float speed, SpaceShipState s = SpaceShipState.Idle, float aSpeed = 0, int pId = -1)
-        {
-            Position = pos;
-            Rotation = rot;
-
-            Speed = speed;
-            State = s;
-            AngleSpeed = aSpeed;
-            PlanetId = pId;
+            Speed = model.Speed;
+            State = model.State;
+            AngularSpeed = model.AngularSpeed;
+            PlanetId = model.PlanetId;
         }
 
         public void SetTransformParameters(Transform tr)

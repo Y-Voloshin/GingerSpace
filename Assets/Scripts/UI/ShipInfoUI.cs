@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Catopus;
 
 public class ShipInfoUI : MonoBehaviour {
 
@@ -20,10 +21,10 @@ public class ShipInfoUI : MonoBehaviour {
 
 	public void UpdateValues()
 	{
-		Fuel.text = PlayerController.Instance.Parameters.FuelCurrent.ToString ()
-		+ " / " + PlayerController.Instance.Parameters.FuelMax.ToString ();
+		Fuel.text = PlayerController.Instance.FuelCurrent.ToString ()
+		+ " / " + PlayerController.Instance.FuelMax.ToString ();
 
-		int xp = PlayerController.Instance.Parameters.ExpreiencePoints;
+		int xp = PlayerController.Instance.ExperiencePoints;
 		Expa.text = xp > 0 ? xp.ToString () : string.Empty;
 	}
 }

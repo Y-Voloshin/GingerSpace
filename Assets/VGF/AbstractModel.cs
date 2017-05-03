@@ -1,4 +1,7 @@
-﻿namespace VGF
+﻿/// <summary>
+/// Voloshin Game Framework: basic scripts supposed to be reusable
+/// </summary>
+namespace VGF
 {    
     [System.Serializable]
     public abstract class AbstractModel<T> where T : AbstractModel<T>, new()

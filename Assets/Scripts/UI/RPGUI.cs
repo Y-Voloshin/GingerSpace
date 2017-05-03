@@ -43,15 +43,14 @@ namespace Catopus.UI
 
         void UpdateView()
         {
-            var parameters = PlayerController.Instance.Parameters;
-            Expa.text = parameters.ExpreiencePoints.ToString();
-            Fuel.text = parameters.FuelMax.ToString();
-            Strength.text = parameters.StrengthCurrent.ToString();
-            Exploration.text = parameters.ExplorationCurrent.ToString();
-            Diplomacy.text = parameters.DiplomacyCurrent.ToString();
-            Management.text = parameters.ManagementCurrent.ToString();
+            Expa.text = PlayerController.Instance.ExperiencePoints.ToString();
+            Fuel.text = PlayerController.Instance.FuelMax.ToString();
+            Strength.text = PlayerController.Instance.StrengthCurrent.ToString();
+            Exploration.text = PlayerController.Instance.ExplorationCurrent.ToString();
+            Diplomacy.text = PlayerController.Instance.DiplomacyCurrent.ToString();
+            Management.text = PlayerController.Instance.ManagementCurrent.ToString();
 
-            bool canImprove = parameters.ExpreiencePoints > 0;
+            bool canImprove = PlayerController.Instance.ExperiencePoints > 0;
             FuelButton.gameObject.SetActive(canImprove);
             StrengthButton.gameObject.SetActive(canImprove);
             ExplorationButton.gameObject.SetActive(canImprove);
@@ -59,50 +58,39 @@ namespace Catopus.UI
             DiplomacyButton.gameObject.SetActive(canImprove);
         }
 
-        public void IncreaseFuel()
+
+
+        void IncreaseParameter(PlayerParameter p, int parameterPointsIncrease = 1, int ExperiencePointsDecrease = 1)
         {
-            if (PlayerController.Instance.Parameters.ExpreiencePoints <= 0)
+            if (!PlayerController.Instance.SpendExperiencePointsOnParameter(p, parameterPointsIncrease, ExperiencePointsDecrease))
                 return;
-            PlayerController.Instance.Parameters.ExpreiencePoints--;
-            PlayerController.Instance.Parameters.FuelMax += 1;
             UpdateView();
             UIController.UpdateShipInfo();
         }
 
+        public void IncreaseFuel()
+        {
+            IncreaseParameter(PlayerParameter.FuelMax);
+        }
+
         public void IncreaseStrength()
         {
-            if (PlayerController.Instance.Parameters.ExpreiencePoints <= 0)
-                return;
-            PlayerController.Instance.Parameters.ExpreiencePoints--;
-            PlayerController.Instance.Parameters.StrengthCurrent += 1;
-            UpdateView();
+            IncreaseParameter(PlayerParameter.StrengthCurrent);
         }
 
         public void IncreaseExploration()
         {
-            if (PlayerController.Instance.Parameters.ExpreiencePoints <= 0)
-                return;
-            PlayerController.Instance.Parameters.ExpreiencePoints--;
-            PlayerController.Instance.Parameters.ExplorationCurrent += 1;
-            UpdateView();
+            IncreaseParameter(PlayerParameter.ExplorationCurrent);
         }
 
         public void IncreaseDiplomacy()
         {
-            if (PlayerController.Instance.Parameters.ExpreiencePoints <= 0)
-                return;
-            PlayerController.Instance.Parameters.ExpreiencePoints--;
-            PlayerController.Instance.Parameters.DiplomacyCurrent += 1;
-            UpdateView();
+            IncreaseParameter(PlayerParameter.DiplomacyCurrent);
         }
 
         public void IncreaseManagement()
         {
-            if (PlayerController.Instance.Parameters.ExpreiencePoints <= 0)
-                return;
-            PlayerController.Instance.Parameters.ExpreiencePoints--;
-            PlayerController.Instance.Parameters.ManagementCurrent += 1;
-            UpdateView();
+            IncreaseParameter(PlayerParameter.ManagementCurrent);
         }
     }
 }

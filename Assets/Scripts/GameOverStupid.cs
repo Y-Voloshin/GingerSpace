@@ -69,7 +69,7 @@ namespace Catopus.UI
 
         public void CheckOutOfFuel()
         {
-            if (PlayerController.Instance.Parameters.FuelCurrent == 0)
+            if (PlayerController.Instance.FuelCurrent == 0)
             {
                 GameOverWindow.SetActive(true);
                 GameOverCase.text = caseOutOfFuel;

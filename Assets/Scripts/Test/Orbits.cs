@@ -59,7 +59,7 @@ namespace Catopus
 
             var p = GetComponent<Planet>();
             if (p)
-                p.Radius = rMax;
+                p.SetRadius(rMax);
         }
 
         // Will be called after all regular rendering is done

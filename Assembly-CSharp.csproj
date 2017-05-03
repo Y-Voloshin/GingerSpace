@@ -51,11 +51,12 @@
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\GameOverStupid.cs" />
      <Compile Include="Assets\Scripts\InputController.cs" />
+     <Compile Include="Assets\Scripts\Model\PlanetModel.cs" />
+     <Compile Include="Assets\Scripts\Model\PlayerModel.cs" />
+     <Compile Include="Assets\Scripts\Model\PlayerParameters.cs" />
      <Compile Include="Assets\Scripts\Model\SpaceshipModel.cs" />
      <Compile Include="Assets\Scripts\Planet.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
-     <Compile Include="Assets\Scripts\PlayerParameters.cs" />
-     <Compile Include="Assets\Scripts\PlayerSaveData.cs" />
      <Compile Include="Assets\Scripts\Quest\QuestPage.cs" />
      <Compile Include="Assets\Scripts\Quest\QuestProcessor.cs" />
      <Compile Include="Assets\Scripts\Reward.cs" />

@@ -1,51 +1,114 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using VGF;
+using Catopus.Model;
 
-public class PlayerController : MonoBehaviour {
-	public static PlayerController Instance;
-	public PlayerParameters Parameters = new PlayerParameters();
+namespace Catopus
+{
+    public enum PlayerParameter { FuelMax, FuelCurrent, StrengthMin, StrengthCurrent, DiplomacyMax,
+        DiplomacyCurrent, ExplorationMin, ExplorationCurrent, ManagementMax, ManagementCurrent, ExpreiencePoints}
 
-	void Awake()
-	{
-		Instance = this;
-	}
+    public class PlayerController : GenericModelBehaviour<PlayerModel>
+    {
+        public static PlayerController Instance;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+        public int FuelMax { get { return CurrentModel.FuelMax; } }
+        public int FuelCurrent { get { return CurrentModel.FuelCurrent; } }
+        public int StrengthMin { get { return CurrentModel.StrengthMin; } }
+        public int StrengthCurrent { get { return CurrentModel.StrengthCurrent; } }
+        public int DiplomacyMax { get { return CurrentModel.DiplomacyMax; } }
+        public int DiplomacyCurrent { get { return CurrentModel.DiplomacyCurrent; } }
+        public int ExplorationMin { get { return CurrentModel.ExplorationMin; } }
+        public int ExplorationCurrent { get { return CurrentModel.ExplorationCurrent; } }
+        public int ManagementMax { get { return CurrentModel.ManagementMax; } }
+        public int ManagementCurrent { get { return CurrentModel.ManagementCurrent; } }
+        public int ExperiencePoints { get { return CurrentModel.ExpreiencePoints; } }
 
-	public void ApplyReward(Reward reward)
-	{
-		if (reward.IsEmpty)
-			return;
+        protected override void Awake()
+        {
+            Instance = this;
+            base.Awake();
+        }
 
-		Parameters.FuelCurrent += reward.Fuel;
-		if (Parameters.FuelCurrent > Parameters.FuelMax)
-			Parameters.FuelCurrent = Parameters.FuelMax;
-		else if (Parameters.FuelCurrent < 0)
-			Parameters.FuelCurrent = 0;
+        public bool TryTakeFuel(int fuelAmount)
+        {
+            if (fuelAmount > FuelCurrent)
+                return false;
+            CurrentModel.FuelCurrent -= fuelAmount;
+            return true;
+        }
 
-		Parameters.StrengthCurrent += reward.Strength;
-		if (Parameters.StrengthCurrent < Parameters.StrengthMin)
-			Parameters.StrengthCurrent = Parameters.StrengthMin;
+        public void ApplyReward(Reward reward)
+        {
+            if (reward.IsEmpty)
+                return;
 
-		Parameters.DiplomacyCurrent += reward.Diplomacy;
+            CurrentModel.FuelCurrent += reward.Fuel;
+            if (CurrentModel.FuelCurrent > CurrentModel.FuelMax)
+                CurrentModel.FuelCurrent = CurrentModel.FuelMax;
+            else if (CurrentModel.FuelCurrent < 0)
+                CurrentModel.FuelCurrent = 0;
 
-		Parameters.ExplorationCurrent += reward.Exploration;
-		if (Parameters.ExplorationCurrent < Parameters.ExplorationMin)
-			Parameters.ExplorationCurrent = Parameters.ExplorationMin;
+            CurrentModel.StrengthCurrent += reward.Strength;
+            if (CurrentModel.StrengthCurrent < CurrentModel.StrengthMin)
+                CurrentModel.StrengthCurrent = CurrentModel.StrengthMin;
 
-		Parameters.ManagementCurrent += reward.Management;
+            CurrentModel.DiplomacyCurrent += reward.Diplomacy;
 
-		Parameters.ExpreiencePoints += reward.Expa;
-	}
+            CurrentModel.ExplorationCurrent += reward.Exploration;
+            if (CurrentModel.ExplorationCurrent < CurrentModel.ExplorationMin)
+                CurrentModel.ExplorationCurrent = CurrentModel.ExplorationMin;
 
-	//public void 
+            CurrentModel.ManagementCurrent += reward.Management;
+
+            CurrentModel.ExpreiencePoints += reward.Expa;
+        }
+
+        public bool SpendExperiencePointsOnParameter(PlayerParameter p, int parameterPointsIncrease, int ExperiencePointsDecrease)
+        {
+            if (ExperiencePointsDecrease > ExperiencePoints)
+                return false;
+            CurrentModel.ExpreiencePoints -= ExperiencePointsDecrease;
+
+            switch (p)
+            {
+                case PlayerParameter.DiplomacyCurrent:
+                    CurrentModel.DiplomacyCurrent += ExperiencePointsDecrease;
+                    break;
+                case PlayerParameter.DiplomacyMax:
+                    CurrentModel.DiplomacyMax += ExperiencePointsDecrease;
+                    break;
+                case PlayerParameter.ExplorationCurrent:
+                    CurrentModel.ExplorationCurrent += ExperiencePointsDecrease;
+                    break;
+                case PlayerParameter.ExplorationMin:
+                    CurrentModel.ExplorationMin += ExperiencePointsDecrease;
+                    break;
+                //case PlayerParameter.ExpreiencePoints:
+                //    break;
+                case PlayerParameter.FuelCurrent:
+                    CurrentModel.FuelCurrent += ExperiencePointsDecrease;
+                    break;
+                case PlayerParameter.FuelMax:
+                    CurrentModel.FuelMax += ExperiencePointsDecrease;
+                    break;
+                case PlayerParameter.ManagementCurrent:
+                    CurrentModel.ManagementCurrent += ExperiencePointsDecrease;
+                    break;
+                case PlayerParameter.ManagementMax:
+                    CurrentModel.ManagementMax += ExperiencePointsDecrease;
+                    break;
+                case PlayerParameter.StrengthCurrent:
+                    CurrentModel.StrengthCurrent += ExperiencePointsDecrease;
+                    break;
+                case PlayerParameter.StrengthMin:
+                    CurrentModel.StrengthMin += ExperiencePointsDecrease;
+                    break;
+
+            }
+            return true;
+        }
+
+    }
 }

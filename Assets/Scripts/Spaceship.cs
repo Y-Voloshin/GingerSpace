@@ -62,7 +62,7 @@ namespace Catopus
                     CheckSettingOnOrbit();
                     break;
                 case SpaceShipState.OnOrbit:
-                    myTransform.RotateAround(planetTransform.position, Vector3.forward, CurrentModel.AngleSpeed * Time.deltaTime);
+                    myTransform.RotateAround(planetTransform.position, Vector3.forward, CurrentModel.AngularSpeed * Time.deltaTime);
                     break;
                 case SpaceShipState.Falling:
                     FallOnPlanet();
@@ -156,7 +156,7 @@ namespace Catopus
             float r = (myTransform.position - planet.position).magnitude;
             float l = 2 * Mathf.PI * r;
 
-            CurrentModel.AngleSpeed = CurrentModel.Speed / l * Mathf.PI * 100;
+            CurrentModel.AngularSpeed = CurrentModel.Speed / l * Mathf.PI * 100;
             this.planetTransform = planet;
         }
 
@@ -168,11 +168,11 @@ namespace Catopus
             float r = (myTransform.position - planet.position).magnitude;
             float l = 2 * Mathf.PI * r;
 
-            CurrentModel.AngleSpeed = CurrentModel.Speed / l * Mathf.PI * 100;
+            CurrentModel.AngularSpeed = CurrentModel.Speed / l * Mathf.PI * 100;
             this.planetTransform = planet;
 
             if (Vector3.Angle(myTransform.up, planetTransform.position - myTransform.position) > 90)
-                CurrentModel.AngleSpeed = -CurrentModel.AngleSpeed;
+                CurrentModel.AngularSpeed = -CurrentModel.AngularSpeed;
         }
 
         void CheckSettingOnOrbit()
@@ -216,9 +216,8 @@ namespace Catopus
 
         bool TryTakeFuel(int amount)
         {
-            if (PlayerController.Instance.Parameters.FuelCurrent < amount)
+            if (!PlayerController.Instance.TryTakeFuel(amount))
                 return false;
-            PlayerController.Instance.Parameters.FuelCurrent -= amount;
             UIController.UpdateShipInfo();
             return true;
         }

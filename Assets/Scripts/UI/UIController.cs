@@ -60,7 +60,7 @@ namespace Catopus.UI
         {
             if (planet.Observed)
                 return;
-            planet.Observed = true;
+            planet.Observe();
         }
 
         public static void VisitPlanet(Planet planet)
