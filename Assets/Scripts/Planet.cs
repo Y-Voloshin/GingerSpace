@@ -19,6 +19,11 @@ namespace Catopus
         /// The observed. Была ли планета найдена
         /// </summary>
         public bool Observed { get { return CurrentModel.Observed; } }
+        public bool LevelObserved { get { return CurrentModel.LevelObserved; } }
+        public bool PopulationObserved { get { return CurrentModel.PopulationObserved; } }
+        public bool ResourcesObserved { get { return CurrentModel.ResourcesObserved; } }
+
+
         /// <summary>
         /// The visited. Была ли планета посещена? Планету можно посетить один раз.
         /// </summary>
@@ -65,6 +70,7 @@ protected override void Awake()
             UIController.OnPlanetOrbitListener(this);
         }
 
+        //TODO: take player parameter arguments
         void ObservePlanet()
         {
             if (Observed)
@@ -101,13 +107,15 @@ protected override void Awake()
                 {
                     CurrentModel.Reward = GenerateResources();
                     if (!CurrentModel.Reward.IsEmpty)
-                        PlayerController.Instance.ApplyReward(CurrentModel.Reward);
+                        PlayerController.Instance.ApplyReward(CurrentModel.Reward);//TODO: remove all references on player controller
 
                     UIController.ShowReward(CurrentModel.Reward);
 
                 }
             }
         }
+
+        #region move to planet functions
 
         public void LeavePlanet()
         {
@@ -152,6 +160,8 @@ protected override void Awake()
             angle += rotV3.z;
             ship.Rotate(Vector3.forward, angle);
         }
+
+        #endregion
 
         public void SetRadius(float r)
         {

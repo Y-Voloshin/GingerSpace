@@ -22,7 +22,11 @@ namespace Catopus.Model
                 /// </summary>
                 Visited,
                     HasPopulation,
-                    HasResources;
+                    HasResources,
+            
+            LevelObserved,
+            PopulationObserved,
+            ResourcesObserved;
 
         #region quest parameters
         public Reward Reward = new Reward();
@@ -47,11 +51,15 @@ namespace Catopus.Model
             PlanetId = model.PlanetId;
             Radius = model.Radius;
 
-            Level = model.Level;
-            Observed = model.Observed;            
+            Observed = model.Observed;
             Visited = model.Visited;
+
+            Level = model.Level;            
             HasPopulation = model.HasPopulation;
             HasResources = model.HasResources;
+            LevelObserved = model.LevelObserved;
+            PopulationObserved = model.PopulationObserved;
+            ResourcesObserved = model.ResourcesObserved;
 
             #region quest parameters
             Reward = model.Reward;

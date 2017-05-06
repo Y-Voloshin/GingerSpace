@@ -30,8 +30,6 @@ namespace Catopus
             Instance = this;
 
             Init();
-            Debug.Log(InitModel);
-            Debug.Log(CurrentModel);
         }
 
         // Update is called once per frame
@@ -76,21 +74,10 @@ namespace Catopus
         #region Interaction with world objects
         void OnTriggerEnter(Collider other)
         {
-            string tag = other.tag;
-            if (TagActions.ContainsKey(tag))
+            if (TagActions.ContainsKey(other.tag))
                 TagActions[tag](other);
 
-        }
-
-        void OnCollisionEnter(Collision collision)
-        {
-            Debug.Log("collision");
-            /*
-            string tag = collision.transform.tag;
-            if (TagActions.ContainsKey (tag))
-                TagActions [tag] (collision.collider);
-                */
-        }
+        }        
 
         void OnPlanetOrbitEnter(Collider planetCollider)
         {
