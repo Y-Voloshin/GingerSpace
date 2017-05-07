@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Reward  {
-	static Reward _empty = new Reward();
+    static Reward _empty = new Reward { IsEmpty = true};
 	public static Reward Empty {get { return _empty;}}
-	public bool IsEmpty = true;
+	public bool IsEmpty { get; protected set; }
 	public int Fuel,
 			
 	Expa,

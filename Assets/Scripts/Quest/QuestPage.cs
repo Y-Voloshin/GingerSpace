@@ -67,7 +67,6 @@ public class QuestPage {
 			
 			//fuel expa strength explore manag diplom
 			Reward = new Reward ();
-			Reward.IsEmpty = false;
 
 			Reward.Fuel = Convert.ToInt32 (casesWords [0]);
 			Reward.Expa = Convert.ToInt32 (casesWords [1]);

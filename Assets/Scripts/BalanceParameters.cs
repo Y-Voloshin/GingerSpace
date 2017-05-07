@@ -4,6 +4,8 @@ namespace Catopus
 {
     public class BalanceParameters
     {
+        static Random r = new Random(DateTime.Now.Millisecond);
+
         static BalanceParameters Instance = new BalanceParameters();
 
         /// <summary>
@@ -34,36 +36,27 @@ namespace Catopus
             DiplomacyManagementFactor = 0.1f;
             ExplorationManagementFactor = 0.4f;
             ExperienseManagementFactor = 0.1f;
-
-
+        }
+        
+        public static int GetBalancedStrength()
+        {
+            float result3 = PlayerController.Instance.ManagementCurrent * Instance.StrengthManagementFactor
+                        + PlayerController.Instance.StrengthCurrent;
+            return result3 > PlayerController.Instance.StrengthMin ? (int)result3 : PlayerController.Instance.StrengthMin;
         }
 
-        /// <summary>
-        /// Only for inner player parameters: Diplomacy, Exploration and Strength. Not for expa or fuel from quests
-        /// </summary>
-        /// <returns></returns>
-        public static int GetBalancedPlayerParameter(PlayerParameter parameter)
+        public static int GetBalancedDiplomacy()
         {
-            if (PlayerController.Instance == null)
-                return 0;
+            float result1 = PlayerController.Instance.DiplomacyCurrent +
+                          PlayerController.Instance.ManagementCurrent * Instance.DiplomacyManagementFactor;
+            return (int)result1;
+        }
 
-            switch (parameter)
-            {
-                case PlayerParameter.DiplomacyCurrent:
-                    float result1 = PlayerController.Instance.DiplomacyCurrent +
-                        PlayerController.Instance.ManagementCurrent * Instance.DiplomacyManagementFactor;
-                    return (int)result1;
-                case PlayerParameter.ExplorationCurrent:
-                    float result2 = PlayerController.Instance.ManagementCurrent * Instance.ExplorationManagementFactor
-                        + PlayerController.Instance.ExplorationCurrent;
-                    return (int)result2;
-                case PlayerParameter.StrengthCurrent:
-                    float result3 = PlayerController.Instance.ManagementCurrent * Instance.StrengthManagementFactor
-                        + PlayerController.Instance.StrengthCurrent;
-                    return result3 > PlayerController.Instance.StrengthMin? (int)result3 : PlayerController.Instance.StrengthMin;
-                default:
-                    return 0;
-            }
+        public static int GetBalancedExploration()
+        {
+            float result2 = PlayerController.Instance.ManagementCurrent * Instance.ExplorationManagementFactor
+                           + PlayerController.Instance.ExplorationCurrent;
+            return (int)result2;
         }
 
         /// <summary>
@@ -74,13 +67,35 @@ namespace Catopus
         {
             if (basicReward.IsEmpty)
                 return basicReward;
+            //TODO: если награда получается один раз, то можно не бояться модифицировать ее значения и не создавать лишний экземпляр.
             Reward result = new Reward();
 
+            if (basicReward.Fuel > 0)
+            {
+                result.Fuel = basicReward.Fuel + GetBalancedExploration();
+                if (result.Fuel < 0)
+                    result.Fuel = 0;
+            }
+
+            if (basicReward.Expa > 0)
+            {
+                result.Expa = (int)(basicReward.Expa * (1 + GetBalancedExploration());
+                if (result.Expa < 0)
+                    result.Expa = 0;
+            }
+
+            if (result.Expa == 0 && result.Fuel == 0)
+                return Reward.Empty;
+
             //TODO: write logic here
-
-
             return result;
         }
+
+        public static int GetBalancedPlanetLevel(int basicPlanetLevel)
+        {
+            return 1 + r.Next(basicPlanetLevel * 2);
+        }
+
 
     }
 }

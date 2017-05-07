@@ -184,10 +184,9 @@ protected override void Awake()
 
             Reward result = new Reward();
             //min fuel + planet level fuel + exploration fuel
-            int fuel = 2 + Random.Range(0, Level + PlayerController.Instance.ExplorationCurrent + 1);
+            result.Fuel = 2 + Random.Range(0, Level);// + PlayerController.Instance.ExplorationCurrent + 1);
 
-            result.IsEmpty = false;
-            result.Fuel = fuel;
+            result = BalanceParameters.GetBalancedReward(result);
             return result;
         }
 
