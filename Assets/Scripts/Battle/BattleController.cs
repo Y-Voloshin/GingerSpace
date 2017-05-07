@@ -28,7 +28,7 @@ namespace Catopus.Battle
             result.Message = GetMessage(result.Victory, battlefieldType);
             result.Reward = result.Victory ? GenerateReward(enemyLevel, battlefieldType) : Reward.Empty;
 
-            OnBattleFinished?.Invoke(result);
+            if (OnBattleFinished != null) OnBattleFinished.Invoke(result);
         }
 
         Reward GenerateReward(int enemyLevel, BattlefieldType battlefieldType)

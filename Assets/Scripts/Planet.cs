@@ -9,6 +9,8 @@ namespace Catopus
 {
     public class Planet : GenericModelBehaviour<PlanetModel>
     {
+        static System.Random r = new System.Random(System.DateTime.Now.Millisecond);
+
         public static Planet Current;
         static Planet[] All;
 
@@ -80,9 +82,9 @@ protected override void Awake()
 
         public void VisitPlanet()
         {
+            //TODO: put this three lines of code code somewhere else
             if (!PlayerController.Instance.TryTakeFuel(1))
                 return;
-
             UIController.UpdateShipInfo();
 
             if (Visited)
@@ -91,6 +93,8 @@ protected override void Awake()
                 return;
             }
             CurrentModel.Visited = true;
+
+
             if (HasQuest)
             {
                 UIController.ShowQuest(QuestId);
@@ -102,17 +106,31 @@ protected override void Awake()
                 //Иначе - просто добываем ресурсы
                 if (HasPopulation)
                 {
+                    InteractWithPopulation();
                 }
                 else
                 {
-                    CurrentModel.Reward = GenerateResources();
-                    if (!CurrentModel.Reward.IsEmpty)
-                        PlayerController.Instance.ApplyReward(CurrentModel.Reward);//TODO: remove all references on player controller
-
-                    UIController.ShowReward(CurrentModel.Reward);
-
+                    ExploreForResoures();
                 }
             }
+        }
+
+        void InteractWithPopulation()
+        {
+            //conflict chance is 50/50
+            //And each diplomacy point increases pacific chance
+            //So conflict chance is planetLevel and pacific chance is planetLevel  diplomacy
+
+        }
+
+        public void ExploreForResoures()
+        {
+            //It can be called after battle by external class
+            CurrentModel.Reward = GenerateResources();
+            if (!CurrentModel.Reward.IsEmpty)
+                PlayerController.Instance.ApplyReward(CurrentModel.Reward);//TODO: remove all references on player controller
+
+            UIController.ShowReward(CurrentModel.Reward);
         }
 
         #region move to planet functions
@@ -193,9 +211,10 @@ protected override void Awake()
         #endregion
     }
 
-
+    /*
     public struct PlanetResources
     {
         public int FuelAmount;
     }
+    */
 }

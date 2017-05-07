@@ -79,7 +79,7 @@ namespace Catopus
 
             if (basicReward.Expa > 0)
             {
-                result.Expa = (int)(basicReward.Expa * (1 + GetBalancedExploration());
+                result.Expa = (int)(basicReward.Expa * (1 + GetBalancedExploration()));
                 if (result.Expa < 0)
                     result.Expa = 0;
             }
