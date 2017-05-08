@@ -34,9 +34,18 @@ namespace Catopus.UI
         void FixedUpdate()
         {
             bool toofar = true;
-
+            /*
+            if (Spaceship.Instance == null)
+            {
+                //Debug.Log(Spaceship.Instance);
+                return;
+            }
+            */
             foreach (var p in planets)
             {
+                //Debug.Log(Spaceship.Instance);
+                //Debug.Log(p);
+
                 float d = Vector3.Distance(Spaceship.Instance.transform.position, p.transform.position);
                 if (d < 70)
                 {

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+using VGF.UintyUI;
 
 namespace Catopus.UI
 {
@@ -26,6 +28,13 @@ namespace Catopus.UI
         PlanetExploreResult RewardForm;
         [SerializeField]
         RPGUI RPGPanel;
+        [SerializeField]
+        BattleResultForm BattleResultForm;
+
+        #region events
+        public static event Action OnBattleResultPanelClosed;
+
+        #endregion
 
         // Use this for initialization
         void Start()
@@ -112,6 +121,21 @@ namespace Catopus.UI
             Instance.QuestForm.gameObject.SetActive(true);
             Instance.QuestForm.ShowQuest(questId);
         }
+
+        #endregion
+
+        #region battle functions
+        public static void ShowBattleResult()
+        {
+            if (Instance.BattleResultForm != null)
+                Instance.BattleResultForm.gameObject.SetActive(true);
+        }
+
+        public void CloseBattleResultPanel()
+        {
+            if (OnBattleResultPanelClosed != null)
+                OnBattleResultPanelClosed();
+        }
         #endregion
 
         public void ShowRPGPanel()
@@ -156,17 +180,5 @@ namespace Catopus.UI
         }
 
         #endregion
-    }
-
-    public static class ButtonExtensions
-    {
-        public static void SetActivity(this Button b, bool active)
-        {
-            if (b == null)
-                return;
-            b.enabled = active;
-            b.gameObject.SetActive(active);
-        }
-
     }
 }

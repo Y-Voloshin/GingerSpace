@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Catopus.UI;
@@ -13,6 +14,8 @@ namespace Catopus
 
         public static Planet Current;
         static Planet[] All;
+
+        
 
         public float Radius { get { return CurrentModel.Radius; } }
         #region common parameters
@@ -40,22 +43,28 @@ namespace Catopus
         public bool QuestCompleted { get { return CurrentModel.QuestCompleted; } }
 
         public int QuestId { get { return CurrentModel.QuestId; } }
-#endregion
+        #endregion
 
-#region check point
+        #region events
+        public event Action<Planet> OnConflictAppeared;
 
-#endregion
+        #endregion
 
 
-//TODO: refactor all planets list
-protected override void Awake()
+        #region check point
+
+        #endregion
+
+
+        //TODO: refactor all planets list
+        protected override void Awake()
         {
             All = null;
             base.Awake();
         }
 
         // Use this for initialization
-        protected override void Start()
+        protected void Start()
         {
             //HasQuest = true;
             if (All == null)
@@ -106,6 +115,7 @@ protected override void Awake()
                 //Иначе - просто добываем ресурсы
                 if (HasPopulation)
                 {
+                    //for (int i = 0; i < 50; i++)
                     InteractWithPopulation();
                 }
                 else
@@ -120,7 +130,13 @@ protected override void Awake()
             //conflict chance is 50/50
             //And each diplomacy point increases pacific chance
             //So conflict chance is planetLevel and pacific chance is planetLevel  diplomacy
+            int peaceProb = Level + BalanceParameters.GetBalancedDiplomacy();
+            bool conflict = (peaceProb <= 0) || r.Next(Level + peaceProb) < Level;
+            //conflict = true; // debug
 
+            if (conflict)
+                if (OnConflictAppeared != null)
+                    OnConflictAppeared.Invoke(this);
         }
 
         public void ExploreForResoures()
@@ -202,7 +218,7 @@ protected override void Awake()
 
             Reward result = new Reward();
             //min fuel + planet level fuel + exploration fuel
-            result.Fuel = 2 + Random.Range(0, Level);// + PlayerController.Instance.ExplorationCurrent + 1);
+            result.Fuel = 2 + r.Next(0, Level);// + PlayerController.Instance.ExplorationCurrent + 1);
 
             result = BalanceParameters.GetBalancedReward(result);
             return result;

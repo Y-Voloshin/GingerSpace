@@ -21,15 +21,18 @@ namespace Catopus
         public SpaceShipState State { get { return CurrentModel.State; } }
 
         // Use this for initialization
-        protected override void Start()
+        protected void Start()
         {
+            Debug.Log("spaceship start");
+
             TagActions.Add("PlanetOrbit", OnPlanetOrbitEnter);
             TagActions.Add("Finish", OnFinishEnter);
 
-            myTransform = transform;
+            //myTransform = transform;
             Instance = this;
-
-            Init();
+            Debug.Log("spaceship instance");
+            Debug.Log(Instance);
+            //Init();
         }
 
         // Update is called once per frame
@@ -75,7 +78,7 @@ namespace Catopus
         void OnTriggerEnter(Collider other)
         {
             if (TagActions.ContainsKey(other.tag))
-                TagActions[tag](other);
+                TagActions[other.tag](other);
 
         }        
 
@@ -149,7 +152,7 @@ namespace Catopus
 
         void StartSetToOrbit(Transform planet)
         {
-            Debug.Log("start sto");
+            //Debug.Log("start sto");
             CurrentModel.State = SpaceShipState.SettingOnOrbit;
 
             float r = (myTransform.position - planet.position).magnitude;
@@ -211,8 +214,12 @@ namespace Catopus
 
         public override void Init()
         {
-            CurrentModel.SetTransformParameters(myTransform);
+            //print(CurrentModel);
+            //print(myTransform);
             base.Init();
+            print(CurrentModel);
+            print(myTransform);
+            CurrentModel.SetTransformParameters(myTransform);
         }
 
         public override void Save()

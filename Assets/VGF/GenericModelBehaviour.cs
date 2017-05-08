@@ -11,19 +11,25 @@ namespace VGF
     {
         [SerializeField]
         protected T InitModel;
-        [SerializeField]
+        //[SerializeField]
         protected T CurrentModel, SavedModel;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            Init();
+        }
 
         public virtual void Init()
         {
-            Debug.Log(InitModel);
+            //Debug.Log(InitModel);
             if (InitModel == null)
                 return;
-            Debug.Log("Init current model");
+            Debug.Log(gameObject.name + " : Init current model");
             CurrentModel = new T();
             CurrentModel.InitializeWith(InitModel);
-            Debug.Log(CurrentModel);
-            Debug.Log("Init saved model");
+            //Debug.Log(CurrentModel);
+            //Debug.Log("Init saved model");
             SavedModel = new T();
             SavedModel.InitializeWith(InitModel);
         }

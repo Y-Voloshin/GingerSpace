@@ -19,7 +19,7 @@ namespace Catopus.Battle
         /// Бой не обязательно автоматический и мгновенный. Поэтому сначала мы запускаем бой, а потом слушаем событие окончания боя.
         /// А между ними работает боевая система - и остальная игра о ее работе ничего не знает.
         /// ---
-        event Action<BattleResultModel> OnBattleFinished;
+        event Action OnBattleFinished;
 
         /// <summary>
         /// Start battle

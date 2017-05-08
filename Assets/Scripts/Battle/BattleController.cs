@@ -12,7 +12,7 @@ namespace Catopus.Battle
         
         Random r = new Random(DateTime.Now.Millisecond);
 
-        public event Action<BattleResultModel> OnBattleFinished;
+        public event Action OnBattleFinished;
         string PlanetWin = "Вы успешно истребили коренное население планеты. Как в старые добрые времена!",
                PlanetLose = "Местные обитатели испортили ваше вторжение. Возможно, они просто русские.",
                SpaceshipWin = "Космические пираты - это не только ценный опыт, но и три-четыре забавные шкурки для таксидермиста.",
@@ -21,14 +21,14 @@ namespace Catopus.Battle
 
         public void StartBattle(int enemyLevel, BattlefieldType battlefieldType = BattlefieldType.Planet)
         {
-            BattleResultModel result = new BattleResultModel();
-
             int sumProbability = enemyLevel + BalanceParameters.GetBalancedStrength();
-            result.Victory = r.Next(sumProbability) >= enemyLevel;
-            result.Message = GetMessage(result.Victory, battlefieldType);
-            result.Reward = result.Victory ? GenerateReward(enemyLevel, battlefieldType) : Reward.Empty;
+            var Victory = r.Next(sumProbability) >= enemyLevel;
+            var Message = GetMessage(Victory, battlefieldType);
+            var rew = Victory ? GenerateReward(enemyLevel, battlefieldType) : Reward.Empty;
 
-            if (OnBattleFinished != null) OnBattleFinished.Invoke(result);
+            BattleResultModel.UpdateLastResult(battlefieldType, Victory, rew, Message);
+
+            if (OnBattleFinished != null) OnBattleFinished();
         }
 
         Reward GenerateReward(int enemyLevel, BattlefieldType battlefieldType)

@@ -38,7 +38,7 @@ namespace Catopus
             }
         }
 
-        void Awake()
+        void Start()
         {
             SetColliderRadius();
         }

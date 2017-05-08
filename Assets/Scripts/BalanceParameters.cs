@@ -38,6 +38,10 @@ namespace Catopus
             ExperienseManagementFactor = 0.1f;
         }
         
+        /// <summary>
+        /// Сила, пересчитанная с учетом менеджмента
+        /// </summary>
+        /// <returns></returns>
         public static int GetBalancedStrength()
         {
             float result3 = PlayerController.Instance.ManagementCurrent * Instance.StrengthManagementFactor
@@ -45,17 +49,31 @@ namespace Catopus
             return result3 > PlayerController.Instance.StrengthMin ? (int)result3 : PlayerController.Instance.StrengthMin;
         }
 
+        /// <summary>
+        /// Дипломатия, пересчитанная с учетом менеджмента
+        /// </summary>
+        /// <returns></returns>
         public static int GetBalancedDiplomacy()
         {
             float result1 = PlayerController.Instance.DiplomacyCurrent +
                           PlayerController.Instance.ManagementCurrent * Instance.DiplomacyManagementFactor;
+            result1 = -100;
             return (int)result1;
         }
 
+        /// <summary>
+        /// Исследование, пересчитанное с учетом менеджмента
+        /// </summary>
+        /// <returns></returns>
         public static int GetBalancedExploration()
         {
             float result2 = PlayerController.Instance.ManagementCurrent * Instance.ExplorationManagementFactor
                            + PlayerController.Instance.ExplorationCurrent;
+
+            /*
+            UnityEngine.Debug.Log(PlayerController.Instance.ManagementCurrent.ToString() + "  "
+                + Instance.ExplorationManagementFactor.ToString() + "  " + PlayerController.Instance.ExplorationCurrent.ToString());
+                */
             return (int)result2;
         }
 
@@ -79,7 +97,7 @@ namespace Catopus
 
             if (basicReward.Expa > 0)
             {
-                result.Expa = (int)(basicReward.Expa * (1 + GetBalancedExploration()));
+                result.Expa = (int)(basicReward.Expa * (1 + Instance.ExperienseManagementFactor * GetBalancedExploration()));
                 if (result.Expa < 0)
                     result.Expa = 0;
             }
