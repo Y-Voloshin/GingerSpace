@@ -34,6 +34,7 @@ namespace Catopus
             SubscribeOnPlanetEvents();
             SubscribeOnBattleEvents();
             SubscribeOnUIEvents();
+            SubscribeOnUIHotkeyEvents();
         }
         #endregion
 
@@ -58,10 +59,111 @@ namespace Catopus
             UIController.OnBattleResultPanelClosed += OnBattleResultPanelClosedHandler;
         }
 
+        void SubscribeOnSpaceshipEvents()
+        {
+
+        }
+
+        void SubscribeOnUIHotkeyEvents()
+        {
+            ButtonInput.InputController.OnAccelerateButtonDown += OnTryLeavePlanetHandler;
+            UIController.OnTryLeavePlanet += OnTryLeavePlanetHandler;
+
+            ButtonInput.InputController.OnGoToNearestPlanetButtonDown += OnTryGoToNearestPlanetHandler;
+            UIController.OnTryGoToNearestPlanet += OnTryGoToNearestPlanetHandler;
+        }
+
+        #endregion
+
+        public void SetState(GameState state)
+        {
+
+        }        
+
+        #region UI command functions dublicated by input controller (commands with hotkeys)
+
+        void OnTryLeavePlanetHandler()
+        {
+            int fuel = BalanceParameters.GetFuelForAcceleration();
+            if (PlayerController.Instance.NotEnoughFuel(fuel))
+                return;
+            if (Spaceship.Instance.TryAccelerate())
+            {
+                PlayerController.Instance.TryTakeFuel(fuel);
+                UIController.UpdateShipInfo();
+            }
+        }
+
+        void OnTryGoToNearestPlanetHandler()
+        {
+            int fuel = BalanceParameters.GetFuelForGoingToNearestPlanet();
+            if (PlayerController.Instance.NotEnoughFuel(fuel))
+                return;
+            if (Spaceship.Instance.TryGoToNearestPlanet())
+            {
+                PlayerController.Instance.TryTakeFuel(fuel);
+                UIController.UpdateShipInfo();
+            }
+        }
+
         #endregion
 
 
+        #region player parameter functions
+
+        void OnTakeFuelHandler()
+        {
+
+        }
+
+        void OnOutOfFuelHandler()
+        {
+
+        }
+
+        void OnParametersUpdateHandler()
+        {
+
+        }
+
+        #endregion
+
+        #region spaceship functions
+
+        void OnSetOnOrbitHandler()
+        {
+
+        }
+
+        void OnPlanetLeftHandler()
+        {
+
+        }
+
+        void OnLostInSpaceHandler()
+        {
+
+        }
+
+        void OnCrashednPlanetHandler()
+        {
+
+        }
+
+        #endregion
+
         #region observe planet function
+
+        void OnPlanetObserveStartedHandler()
+        {
+
+        }
+
+        void OnPlanetObservedHandler()
+        {
+
+        }
+
         void OnPlanetConflictAppearedHandler(Planet p)
         {
             Debug.Log("Start battle: planet level is " + p.Level.ToString());

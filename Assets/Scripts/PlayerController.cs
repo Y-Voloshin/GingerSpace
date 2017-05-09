@@ -31,6 +31,11 @@ namespace Catopus
             base.Awake();
         }
 
+        public bool NotEnoughFuel(int fuelAmount)
+        {
+            return fuelAmount > FuelCurrent;
+        }
+
         public bool TryTakeFuel(int fuelAmount)
         {
             if (fuelAmount > FuelCurrent)

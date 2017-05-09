@@ -25,7 +25,7 @@ namespace VGF
             //Debug.Log(InitModel);
             if (InitModel == null)
                 return;
-            Debug.Log(gameObject.name + " : Init current model");
+            //Debug.Log(gameObject.name + " : Init current model");
             CurrentModel = new T();
             CurrentModel.InitializeWith(InitModel);
             //Debug.Log(CurrentModel);

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Catopus.Quest;
 
 namespace Catopus.UI
 {
@@ -34,7 +35,7 @@ namespace Catopus.UI
 
         public void ShowQuest(int questId)
         {
-            QuestPage q = QuestProcessor.Instance.GetQuest(questId);
+            QuestPage q = QuestProcessor.GetQuest(questId);
             if (q == null)
                 return;
 
@@ -59,7 +60,7 @@ namespace Catopus.UI
                 return;
             int caseId = a.Cases[r.Next(a.Cases.Count)];
 
-            var q = QuestProcessor.Instance.GetQuestPage(currentQuestId, caseId);
+            var q = QuestProcessor.GetQuestPage(currentQuestId, caseId);
 
             if (q.IsEndPage)
             {
@@ -77,11 +78,12 @@ namespace Catopus.UI
 
         void FillAnswers(List<int> answerIds)
         {
+            //Debug.Log(answerIds.Count);
             for (int i = 0; i < 5; i++)
             {
                 if (answerIds.Count > i)
                 {
-                    answers[i] = QuestProcessor.Instance.GetQuestPage(currentQuestId, answerIds[i]);
+                    answers[i] = QuestProcessor.GetQuestPage(currentQuestId, answerIds[i]);
                     if (AnswerButtons[i] != null)
                     {
                         if (!AnswerButtons[i].activeSelf)
@@ -89,6 +91,7 @@ namespace Catopus.UI
                     }
                     if (AnswerTexts[i] != null)
                     {
+                        //Debug.Log(answers[i]);
                         AnswerTexts[i].text = answers[i] == null ? string.Empty : answers[i].Text;
                     }
                 }

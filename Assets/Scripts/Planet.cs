@@ -45,6 +45,8 @@ namespace Catopus
         public int QuestId { get { return CurrentModel.QuestId; } }
         #endregion
 
+        public bool RandomizeParameters = true;
+
         #region events
         public event Action<Planet> OnConflictAppeared;
 
@@ -69,8 +71,20 @@ namespace Catopus
             //HasQuest = true;
             if (All == null)
                 All = FindObjectsOfType<Planet>();
+            if (RandomizeParameters)
+            {
+                Randomize();
+                Init();
+            }
         }
         
+        void Randomize()
+        {
+            r = new System.Random(DateTime.Now.Millisecond);
+            InitModel.HasResources = r.Next(2) > 0;
+            InitModel.HasPopulation = r.Next(2) > 0;
+            InitModel.HasQuest = Quest.QuestProcessor.GetRandomQuestId(ref InitModel.QuestId);
+        }
 
         public void OnPlanetOrbitListener()
         {
@@ -182,16 +196,17 @@ namespace Catopus
             var v = ship.position;
             float dist = Vector3.Distance(transform.position, ship.position);
             float angle = Mathf.Asin(Radius / dist) * 180 / Mathf.PI;
-            Debug.Log(" == " + angle.ToString());
+            Debug.Log(" == angle : " + angle.ToString() + "  " + Radius.ToString());
             Vector3 shipToPlanetV3 = transform.position - ship.position;
             float upAngle = Vector3.Angle(shipToPlanetV3, ship.up);
             if (upAngle < 90 || upAngle > 270)
                 angle = -angle;
             Vector3 rotV3 = Quaternion.FromToRotation(ship.right, shipToPlanetV3).eulerAngles;
             //angle = Vector3.Angle (shipToPlanetV3, ship.right);
-            Debug.Log(angle);
+            //Debug.Log(angle);
 
             angle += rotV3.z;
+            Debug.Log(" == angle + rotV3 " + angle.ToString());
             ship.Rotate(Vector3.forward, angle);
         }
 
@@ -199,7 +214,7 @@ namespace Catopus
 
         public void SetRadius(float r)
         {
-            CurrentModel.Radius = r;
+            InitModel.Radius = r;
         }
 
         public void Observe()

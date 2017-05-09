@@ -17,6 +17,10 @@ public class CameraMove : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		transform.position = new Vector3 (ship.position.x, ship.position.y, transform.position.z);
+        Vector3 targetPos = Catopus.Spaceship.Instance.State == Catopus.SpaceShipState.OnOrbit ?
+            Catopus.Planet.Current.myTransform.position : ship.position;
+        targetPos.z = myTransform.position.z;
+
+        myTransform.position = Vector3.Lerp(myTransform.position, targetPos, Time.deltaTime * 2);
 	}
 }

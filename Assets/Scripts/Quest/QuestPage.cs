@@ -36,6 +36,7 @@ public class QuestPage {
 				{
 					case "end":
 						IsEndPage = true;
+                        //UnityEngine.Debug.Log("is end page");
 						break;
 				case "good":
 					DiplomacyType = DiplomacyResult.Good;
@@ -75,8 +76,15 @@ public class QuestPage {
 			Reward.Management = Convert.ToInt32 (casesWords [4]);
 			Reward.Diplomacy = Convert.ToInt32 (casesWords [5]);
 		} else {
-			foreach (var c in casesWords)
-				Cases.Add (Convert.ToInt32 (c));
+            foreach (var c in casesWords)
+                try
+                {
+                    Cases.Add(Convert.ToInt32(c));
+                }
+                catch
+                {
+                    UnityEngine.Debug.Log(IsEndPage.ToString() + "   " + str);
+                }
 		}
 	}
 

@@ -27,6 +27,15 @@ namespace Catopus
         /// </summary>
         public readonly float ExperienseManagementFactor;
 
+        /// <summary>
+        /// Frequency of planets with no quest
+        /// </summary>
+        readonly float NoQuestProbablilityWeight;
+
+        public readonly int FuelForAcceleration;
+        public readonly int FuelForGoingToNearestPlanet; //maybe rename to SetCourse
+        public readonly int FuelForExploringPlanet;
+
         public BalanceParameters()
         {
             //TODO: load balance from settings file
@@ -36,6 +45,11 @@ namespace Catopus
             DiplomacyManagementFactor = 0.1f;
             ExplorationManagementFactor = 0.4f;
             ExperienseManagementFactor = 0.1f;
+            NoQuestProbablilityWeight = 0.3f;
+
+            FuelForAcceleration = 1;
+            FuelForGoingToNearestPlanet = 3;
+            FuelForExploringPlanet = 1;
         }
         
         /// <summary>
@@ -76,6 +90,11 @@ namespace Catopus
                 */
             return (int)result2;
         }
+        
+        public static int GetFuelForAcceleration() { return Instance.FuelForAcceleration; }
+        public static int GetFuelForGoingToNearestPlanet() { return Instance.FuelForGoingToNearestPlanet; }
+        public static int GetFuelForExploringPlanet() { return Instance.FuelForExploringPlanet; }
+
 
         /// <summary>
         /// 
@@ -114,6 +133,9 @@ namespace Catopus
             return 1 + r.Next(basicPlanetLevel * 2);
         }
 
-
+        public static int GetBalancedProbabilityValueForAssigningQuest(int questAmount)
+        {
+            return (int)(questAmount * (1 + Instance.NoQuestProbablilityWeight));
+        }
     }
 }

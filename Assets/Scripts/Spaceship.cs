@@ -2,10 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using Catopus.Model;
 using VGF;
-using Catopus.UI;
 
 namespace Catopus
 {
@@ -39,19 +37,7 @@ namespace Catopus
         protected override void Update()
         {
             if (GameManager.State != GameState.Space)
-                return;
-
-            if (Input.GetKeyDown(KeyCode.Space))
-                Accelerate();
-
-            if (Input.GetKeyDown(KeyCode.LeftControl))
-                GoToNearestPlanet();
-
-            if (Input.GetMouseButtonDown(0))
-            {
-                //Accelerate();
-                //GoToNearestPlanet();
-            }
+                return;            
 
             switch (CurrentModel.State)
             {
@@ -178,37 +164,29 @@ namespace Catopus
 
         #endregion
 
-        public void Accelerate()
+        public bool TryAccelerate()
         {
-            if (CurrentModel.State == SpaceShipState.OnOrbit)
-            {
-                if (!TryTakeFuel(1))
-                    return;
-                CurrentModel.State = SpaceShipState.Idle;
-                if (planet != null)
+            if (CurrentModel.State != SpaceShipState.OnOrbit)
+                return false;
+
+            //TODO: remake to planet.current
+            if (planet != null)
                     planet.LeavePlanet();
-            }
+            CurrentModel.State = SpaceShipState.Idle;
+            return true;
         }
 
-        public void GoToNearestPlanet()
+        public bool TryGoToNearestPlanet()
         {
             if (State != SpaceShipState.Idle)
-                return;
+                return false;
 
             var p = Planet.GetClosest();
             if (p == null)
-                return;
-
-            if (!TryTakeFuel(3))
-                return;
-            p.DirectSpaceshipToSelf();
-        }
-
-        bool TryTakeFuel(int amount)
-        {
-            if (!PlayerController.Instance.TryTakeFuel(amount))
                 return false;
-            UIController.UpdateShipInfo();
+
+            //TODO: direct spaceship to p from spaceship itself
+            p.DirectSpaceshipToSelf();
             return true;
         }
 
@@ -217,8 +195,8 @@ namespace Catopus
             //print(CurrentModel);
             //print(myTransform);
             base.Init();
-            print(CurrentModel);
-            print(myTransform);
+            //print(CurrentModel);
+            //print(myTransform);
             CurrentModel.SetTransformParameters(myTransform);
         }
 

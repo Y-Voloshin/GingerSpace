@@ -32,7 +32,9 @@ namespace Catopus.UI
         BattleResultForm BattleResultForm;
 
         #region events
-        public static event Action OnBattleResultPanelClosed;
+        public static event Action OnBattleResultPanelClosed,
+            OnTryLeavePlanet,
+            OnTryGoToNearestPlanet;
 
         #endregion
 
@@ -152,6 +154,18 @@ namespace Catopus.UI
         }
 
         #region abilities buttons
+
+        public void TryLeavePlanet()
+        {
+            if (OnTryLeavePlanet != null)
+                OnTryLeavePlanet();
+        }
+
+        public void TryGoToNearestPlanet()
+        {
+            if (OnTryGoToNearestPlanet != null)
+                OnTryGoToNearestPlanet();
+        }
 
         public void VisitCurrentPlanet()
         {
