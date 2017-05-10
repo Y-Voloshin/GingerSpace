@@ -2,9 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Catopus.UI;
+//using Catopus.UI;
 using VGF;
 using Catopus.Model;
+using Catopus.UI;
 
 namespace Catopus
 {
@@ -48,6 +49,8 @@ namespace Catopus
         public bool RandomizeParameters = true;
 
         #region events
+        public static event Action OnCurrentPlanetObserved;
+
         public event Action<Planet> OnConflictAppeared;
 
         #endregion
@@ -84,23 +87,36 @@ namespace Catopus
             InitModel.HasResources = r.Next(2) > 0;
             InitModel.HasPopulation = r.Next(2) > 0;
             InitModel.HasQuest = Quest.QuestProcessor.GetRandomQuestId(ref InitModel.QuestId);
+            if (InitModel.HasQuest)
+                InitModel.HasPopulation = true;
         }
 
-        public void OnPlanetOrbitListener()
+        public void OnSpaceshipOnOrbit()
         {
             Current = this;
-            ObservePlanet();
-            if (Visited)
-                return;
-            UIController.OnPlanetOrbitListener(this);
-        }
-
-        //TODO: take player parameter arguments
-        void ObservePlanet()
-        {
             if (Observed)
                 return;
+            ObserveNewPlanetFirstTime();
+        }
+                
+        /// <summary>
+        /// Maybe we will add re-observe for fuel.
+        /// For example: we visit planet second time after improving exploration.
+        /// We can expect that we will re-obsere it.
+        /// Or maybe we will re-observe planet just every visit.
+        /// </summary>
+        public void ObserveNewPlanetFirstTime()
+        {
             CurrentModel.Observed = true;
+            int exploration = BalanceParameters.GetBalancedExploration();
+            if (exploration > 0)
+            {
+                int ObserveProbabilitySum = Level + exploration;
+                CurrentModel.LevelObserved = r.Next(ObserveProbabilitySum) >= Level;
+                CurrentModel.ResourcesObserved = r.Next(ObserveProbabilitySum) >= Level;
+                CurrentModel.PopulationObserved = r.Next(ObserveProbabilitySum) >= Level;
+            }
+            OnCurrentPlanetObserved.CallEventIfNotNull();
         }
 
         public void VisitPlanet()
@@ -148,9 +164,9 @@ namespace Catopus
             bool conflict = (peaceProb <= 0) || r.Next(Level + peaceProb) < Level;
             //conflict = true; // debug
 
+            //TODO: not parameter, planet.Current instead
             if (conflict)
-                if (OnConflictAppeared != null)
-                    OnConflictAppeared.Invoke(this);
+                OnConflictAppeared.CallEventIfNotNull(this);
         }
 
         public void ExploreForResoures()
@@ -217,10 +233,7 @@ namespace Catopus
             InitModel.Radius = r;
         }
 
-        public void Observe()
-        {
-            CurrentModel.Observed = true;
-        }
+        
 
         #region resources generation
 

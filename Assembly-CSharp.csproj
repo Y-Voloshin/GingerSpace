@@ -67,6 +67,7 @@
      <Compile Include="Assets\Scripts\Spaceship.cs" />
      <Compile Include="Assets\Scripts\Test\Orbits.cs" />
      <Compile Include="Assets\Scripts\UI\BattleResultForm.cs" />
+     <Compile Include="Assets\Scripts\UI\CurrentPlanetInfo.cs" />
      <Compile Include="Assets\Scripts\UI\PlanetExploreResult.cs" />
      <Compile Include="Assets\Scripts\UI\QuestDialogueOption.cs" />
      <Compile Include="Assets\Scripts\UI\QuestPanel.cs" />
@@ -76,6 +77,7 @@
      <Compile Include="Assets\Scripts\UI\UIController.cs" />
      <Compile Include="Assets\VGF\AbstractModel.cs" />
      <Compile Include="Assets\VGF\CachedBehaviour.cs" />
+     <Compile Include="Assets\VGF\DotNetExtensions\EventExtensions.cs" />
      <Compile Include="Assets\VGF\GenericModelBehaviour.cs" />
      <Compile Include="Assets\VGF\ISaveLoad.cs" />
      <Compile Include="Assets\VGF\UI\UnityUIExtensions.cs" />

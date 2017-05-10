@@ -68,7 +68,7 @@ namespace VGF.UintyUI
                 if (value < NegativeInts.Count)
                     t.text = NegativeInts[value];
                 else
-                    t.text = value.ToString();
+                    t.text = (-value).ToString();
             }
             else
             {
@@ -76,6 +76,25 @@ namespace VGF.UintyUI
                     t.text = PositiveInts[value];
                 else
                     t.text = value.ToString();
+            }
+        }
+
+        public static string GetCachedIntString(this int value)
+        {
+            if (value < 0)
+            {
+                value = -value;
+                if (value < NegativeInts.Count)
+                    return NegativeInts[value];
+                else
+                    return (-value).ToString();
+            }
+            else
+            {
+                if (value < PositiveInts.Count)
+                    return PositiveInts[value];
+                else
+                    return value.ToString();
             }
         }
     }

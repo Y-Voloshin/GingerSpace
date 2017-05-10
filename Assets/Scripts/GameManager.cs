@@ -35,6 +35,7 @@ namespace Catopus
             SubscribeOnBattleEvents();
             SubscribeOnUIEvents();
             SubscribeOnUIHotkeyEvents();
+            SubscribeOnSpaceshipEvents();
         }
         #endregion
 
@@ -61,7 +62,8 @@ namespace Catopus
 
         void SubscribeOnSpaceshipEvents()
         {
-
+            Spaceship.Instance.OnPlanetEnteredInvalidAngle += OnPlanetEnteredInvalidAngleHandler;
+            Spaceship.Instance.OnPlanetEnteredValidAngle += OnPlanetEnteredValidAngleHandler;
         }
 
         void SubscribeOnUIHotkeyEvents()
@@ -129,6 +131,22 @@ namespace Catopus
         #endregion
 
         #region spaceship functions
+
+        void OnPlanetEnteredValidAngleHandler(Planet p)
+        {
+            Debug.Log(p);
+            if (p == null)
+                return;
+
+            p.OnSpaceshipOnOrbit();
+            //Update UI only after observation
+            UIController.OnSpaceshipOnOrbit();
+        }
+
+        void OnPlanetEnteredInvalidAngleHandler(Planet p)
+        {
+
+        }
 
         void OnSetOnOrbitHandler()
         {

@@ -30,6 +30,8 @@ namespace Catopus.UI
         RPGUI RPGPanel;
         [SerializeField]
         BattleResultForm BattleResultForm;
+        [SerializeField]
+        CurrentPlanetInfo CurrentPlanetInfoForm;
 
         #region events
         public static event Action OnBattleResultPanelClosed,
@@ -57,22 +59,30 @@ namespace Catopus.UI
 
         #region planet functions
 
-        public static void OnPlanetOrbitListener(Planet planet)
+        public static void OnSpaceshipOnOrbit()
         {
-            if (planet.Visited)
+            if (Planet.Current.Visited)
                 return;
             Instance.ExplorePlanetButton.SetActivity(true);
             Instance.LeavePlanetButton.SetActivity(true);
             Instance.GoToNearestPlanetButton.SetActivity(false);
             Instance.SaveGameButton.SetActivity(true);
+
+            if (Instance.CurrentPlanetInfoForm != null)
+                Instance.CurrentPlanetInfoForm.Show();
+        }
+
+        public static void OnCurrentPlanetObserved()
+        {
+
         }
 
         static void ObservePlanet(Planet planet)
         {
             if (planet.Observed)
                 return;
-            planet.Observe();
-        }
+            planet.ObserveNewPlanetFirstTime();
+        }        
 
         public static void VisitPlanet(Planet planet)
         {

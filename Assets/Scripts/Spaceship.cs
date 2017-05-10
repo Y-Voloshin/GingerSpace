@@ -10,6 +10,12 @@ namespace Catopus
     public class Spaceship : GenericModelBehaviour<SpaceshipModel>
     {
         public static Spaceship Instance;
+        #region events
+        public event Action<Planet> OnPlanetEnteredValidAngle,
+                                    OnPlanetEnteredInvalidAngle;
+        #endregion
+
+
 
         Dictionary<string, Action<Collider>> TagActions = new Dictionary<string, Action<Collider>>();
 
@@ -21,16 +27,10 @@ namespace Catopus
         // Use this for initialization
         protected void Start()
         {
-            Debug.Log("spaceship start");
-
             TagActions.Add("PlanetOrbit", OnPlanetOrbitEnter);
             TagActions.Add("Finish", OnFinishEnter);
-
-            //myTransform = transform;
+            
             Instance = this;
-            Debug.Log("spaceship instance");
-            Debug.Log(Instance);
-            //Init();
         }
 
         // Update is called once per frame
@@ -71,25 +71,27 @@ namespace Catopus
         void OnPlanetOrbitEnter(Collider planetCollider)
         {
             float angle = Vector3.Angle(myTransform.right, myTransform.position - planetCollider.transform.position);
-            //Debug.Log (angle);
-
-
+            
             Vector3 a = myTransform.right;
             Vector3 b = myTransform.position - planetCollider.transform.position;
 
-            //float c = Vector3. (a, b);
-
-            //Debug.Log (c);
-
-            ///*
             planet = planetCollider.GetComponent<Planet>();
             this.planetTransform = planetCollider.transform;
-            //
+
+            /*
             if (angle > 140)
                 DragToPlanet(planetCollider.transform);
             else
                 StartSetToOrbit(planetCollider.transform);
-            //*/
+                */
+
+            if (angle > 140)
+                OnPlanetEnteredInvalidAngle.CallEventIfNotNull(planet);
+            else
+            {
+                OnPlanetEnteredValidAngle.CallEventIfNotNull(planet);
+                StartSetToOrbit(planet.myTransform);
+            }
         }
 
         void OnFinishEnter(Collider finish)
@@ -149,6 +151,8 @@ namespace Catopus
 
             if (Vector3.Angle(myTransform.up, planetTransform.position - myTransform.position) > 90)
                 CurrentModel.AngularSpeed = -CurrentModel.AngularSpeed;
+
+            //OnPlanetEnteredValidAngle.CallEventIfNotNull(planet.GetComponent<Planet>());
         }
 
         void CheckSettingOnOrbit()
@@ -157,8 +161,9 @@ namespace Catopus
             if (angle < 90.1f)
             {
                 CurrentModel.State = SpaceShipState.OnOrbit;
-                if (planet != null)
-                    planet.OnPlanetOrbitListener();
+                //if (planet != null)
+                //planet.OnPlanetOrbitListener();
+                //OnPlanetEnteredValidAngle.CallEventIfNotNull();
             }
         }
 
