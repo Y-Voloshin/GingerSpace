@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using VGF;
 
 namespace Catopus.ButtonInput
 {
@@ -10,7 +11,10 @@ namespace Catopus.ButtonInput
         static InputController instance;
 
         public static event Action OnAccelerateButtonDown,
-            OnGoToNearestPlanetButtonDown;        
+            OnGoToNearestPlanetButtonDown,
+            OnSave,
+            OnLoad,
+            OnLoadInit;        
 
         void Awake()
         {
@@ -33,13 +37,16 @@ namespace Catopus.ButtonInput
         {
             CheckKeyEvent(KeyCode.Space, OnAccelerateButtonDown);
             CheckKeyEvent(KeyCode.LeftControl, OnGoToNearestPlanetButtonDown);
+
+            CheckKeyEvent(KeyCode.S, OnSave);
+            CheckKeyEvent(KeyCode.L, OnLoad);
+            CheckKeyEvent(KeyCode.I, OnLoadInit);
         }
 
         void CheckKeyEvent(KeyCode key, Action evt)
         {
             if (Input.GetKeyDown(key))
-                if (evt != null)
-                    evt();
+                evt.CallEventIfNotNull();
         }
     }
 }

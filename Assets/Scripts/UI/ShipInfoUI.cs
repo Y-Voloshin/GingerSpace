@@ -4,27 +4,35 @@ using UnityEngine;
 using UnityEngine.UI;
 using Catopus;
 
-public class ShipInfoUI : MonoBehaviour {
+namespace Catopus.UI
+{
+    public class ShipInfoUI : MonoBehaviour
+    {
 
-	[SerializeField]
-	Text Fuel, Expa;
+        [SerializeField]
+        LabelValueGroup Fuel, Expa; // ExpaLabel;
+        //TODO: create a logic for LabeLValueGropu that hides label if value is 0
 
-	// Use this for initialization
-	void Start () {
-		UpdateValues ();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+        // Use this for initialization
+        void Start()
+        {
+            UpdateValues();
+        }
 
-	public void UpdateValues()
-	{
-		Fuel.text = PlayerController.Instance.FuelCurrent.ToString ()
-		+ " / " + PlayerController.Instance.FuelMax.ToString ();
+        // Update is called once per frame
+        void Update()
+        {
 
-		int xp = PlayerController.Instance.ExperiencePoints;
-		Expa.text = xp > 0 ? xp.ToString () : string.Empty;
-	}
+        }
+
+        public void UpdateValues()
+        {
+            Fuel.SetValueSafe(PlayerController.Instance.FuelCurrent.ToString()
+            + " / " + PlayerController.Instance.FuelMax.ToString());
+
+            //int xp = PlayerController.Instance.ExperiencePoints;
+            //Debug.Log(PlayerController.Instance.ExperiencePoints);
+            Expa.SetValueSafe(PlayerController.Instance.ExperiencePoints);
+        }
+    }
 }

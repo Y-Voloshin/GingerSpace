@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 namespace VGF
 {
@@ -7,7 +8,7 @@ namespace VGF
     /// Controller for abstract models, providing save, load, reset model
     /// </summary>
     /// <typeparam name="T">AbstractModel child type</typeparam>
-    public class GenericModelBehaviour<T> : CachedBehaviour, ISaveLoad where T : AbstractModel<T>, new()
+    public class GenericModelBehaviour<T> : SaveLoadBehaviour where T : AbstractModel<T>, new()
     {
         [SerializeField]
         protected T InitModel;
@@ -20,7 +21,7 @@ namespace VGF
             Init();
         }
 
-        public virtual void Init()
+        protected override void Init()
         {
             //Debug.Log(InitModel);
             if (InitModel == null)
@@ -34,12 +35,13 @@ namespace VGF
             SavedModel.InitializeWith(InitModel);
         }
 
-        public virtual void Load()
+        protected override void Load()
         {
+            //Debug.Log(gameObject.name + "   saved");
             LoadFrom(SavedModel);
         }
 
-        public virtual void LoadInit()
+        protected override void LoadInit()
         {
             LoadFrom(InitModel);
         }
@@ -51,8 +53,9 @@ namespace VGF
             CurrentModel.SetValues(source);
         }
 
-        public virtual void Save()
+        protected override void Save()
         {
+            //Debug.Log(gameObject.name + "   saved");
             if (CurrentModel == null)
                 return;
             if (SavedModel == null)

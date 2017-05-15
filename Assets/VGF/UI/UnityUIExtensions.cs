@@ -11,7 +11,7 @@ namespace VGF.UintyUI
         {
             if (b == null)
                 return;
-            b.enabled = active;
+            //b.enabled = active;
             b.gameObject.SetActive(active);
         }
     }

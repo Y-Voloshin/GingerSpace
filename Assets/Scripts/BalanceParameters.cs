@@ -4,9 +4,12 @@ namespace Catopus
 {
     public class BalanceParameters
     {
+        //TODO: balance listens to parameters change and updates balanced values instead of calculating em each time
         static Random r = new Random(DateTime.Now.Millisecond);
 
         static BalanceParameters Instance = new BalanceParameters();
+
+        public readonly float OrbitEnterMaxValidAngle;
 
         /// <summary>
         /// Количество добавочных очков силы на одно очко менеджмента
@@ -45,11 +48,13 @@ namespace Catopus
             DiplomacyManagementFactor = 0.1f;
             ExplorationManagementFactor = 0.4f;
             ExperienseManagementFactor = 0.1f;
-            NoQuestProbablilityWeight = 0.3f;
+            NoQuestProbablilityWeight = 0.5f;
 
             FuelForAcceleration = 1;
             FuelForGoingToNearestPlanet = 3;
             FuelForExploringPlanet = 1;
+
+            OrbitEnterMaxValidAngle = 140;
         }
         
         /// <summary>
@@ -71,7 +76,6 @@ namespace Catopus
         {
             float result1 = PlayerController.Instance.DiplomacyCurrent +
                           PlayerController.Instance.ManagementCurrent * Instance.DiplomacyManagementFactor;
-            result1 = -100;
             return (int)result1;
         }
 
@@ -136,6 +140,29 @@ namespace Catopus
         public static int GetBalancedProbabilityValueForAssigningQuest(int questAmount)
         {
             return (int)(questAmount * (1 + Instance.NoQuestProbablilityWeight));
+        }
+
+        public static void GetBalancedDialogCasesProbability (out int good, out int neutral, out int bad)
+        {
+            neutral = good = bad = Planet.Current.Level;
+
+            int bd = GetBalancedDiplomacy();
+            //Level is 10. For diplomacy = 3: good = 13, bad = 10. For -3: good = 10, bad = 13
+            //TODO: check other balanced parameters and do the same wy if needed. If increase is <0 and param + increase < 0,
+            // then not param = 0, but anti-param -= increase
+            if (bd > 0)
+            {
+                good += bd;
+            }
+            else
+            {
+                bad -= bd;
+            }
+        }
+
+        public static float GetOrbitEnterMaxValidAngle()
+        {
+            return Instance.OrbitEnterMaxValidAngle;                 
         }
     }
 }

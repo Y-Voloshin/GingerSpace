@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using VGF;
 using VGF.UintyUI;
 
 namespace Catopus.UI
@@ -17,10 +18,11 @@ namespace Catopus.UI
         GameObject QuestPanel;
 
         [SerializeField]
-        Button ExplorePlanetButton,
-        LeavePlanetButton,
+        Button 
+            //ExplorePlanetButton,
+        //LeavePlanetButton,
         GoToNearestPlanetButton,
-        SaveGameButton;
+        SaveGameButton; //TODO: put it in planet parameters form
 
         [SerializeField]
         QuestPanel QuestForm;
@@ -36,7 +38,11 @@ namespace Catopus.UI
         #region events
         public static event Action OnBattleResultPanelClosed,
             OnTryLeavePlanet,
-            OnTryGoToNearestPlanet;
+            OnTryGoToNearestPlanet,
+
+            OnSaveButtonPressed,
+            OnLoadButtonPressed,
+            OnRestartButtonPressed;
 
         #endregion
 
@@ -47,24 +53,20 @@ namespace Catopus.UI
         }
 
         // Update is called once per frame
+        //TODO: put it in input controller
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.S))
-                Spaceship.Instance.Save();
-            if (Input.GetKeyDown(KeyCode.L))
-                Spaceship.Instance.Load();
-            if (Input.GetKeyDown(KeyCode.I))
-                Spaceship.Instance.LoadInit();
+            
         }
 
         #region planet functions
 
         public static void OnSpaceshipOnOrbit()
         {
-            if (Planet.Current.Visited)
-                return;
-            Instance.ExplorePlanetButton.SetActivity(true);
-            Instance.LeavePlanetButton.SetActivity(true);
+            //if (Planet.Current.Visited)
+            //    return;
+            //Instance.ExplorePlanetButton.SetActivity(true);
+            //Instance.LeavePlanetButton.SetActivity(true);
             Instance.GoToNearestPlanetButton.SetActivity(false);
             Instance.SaveGameButton.SetActivity(true);
 
@@ -86,16 +88,18 @@ namespace Catopus.UI
 
         public static void VisitPlanet(Planet planet)
         {
+            /*
             if (Instance.ExplorePlanetButton != null)
                 Instance.ExplorePlanetButton.gameObject.SetActive(true);
+                */
         }
 
-        public static void LeavePlanet(Planet planet)
+        public static void OnCurrentPlanetLeft()
         {
-            Instance.ExplorePlanetButton.SetActivity(false);
-            Instance.LeavePlanetButton.SetActivity(false);
+            if (Instance.CurrentPlanetInfoForm != null)
+                Instance.CurrentPlanetInfoForm.Hide();
             Instance.GoToNearestPlanetButton.SetActivity(true);
-            Instance.SaveGameButton.SetActivity(false);
+            UpdateShipInfo();
         }
 
         public static void ShowReward(Reward reward)
@@ -165,16 +169,14 @@ namespace Catopus.UI
 
         #region abilities buttons
 
-        public void TryLeavePlanet()
+        public void LeavePlanetButtonPressed()
         {
-            if (OnTryLeavePlanet != null)
-                OnTryLeavePlanet();
+            OnTryLeavePlanet.CallEventIfNotNull();
         }
 
         public void TryGoToNearestPlanet()
         {
-            if (OnTryGoToNearestPlanet != null)
-                OnTryGoToNearestPlanet();
+            OnTryGoToNearestPlanet.CallEventIfNotNull();
         }
 
         public void VisitCurrentPlanet()
@@ -190,17 +192,17 @@ namespace Catopus.UI
 
         public void SaveGame()
         {
-            Spaceship.Instance.Save();
+            OnSaveButtonPressed.CallEventIfNotNull();
         }
 
         public void LoadGame()
         {
-            Spaceship.Instance.Load();
+            OnLoadButtonPressed.CallEventIfNotNull();
         }
 
         public void RestartGame()
         {
-            Spaceship.Instance.LoadInit();
+            OnRestartButtonPressed.CallEventIfNotNull();
         }
 
         #endregion

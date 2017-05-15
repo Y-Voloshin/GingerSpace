@@ -41,6 +41,14 @@ namespace Catopus
         void Start()
         {
             SetColliderRadius();
+            SetInnerRadius();
+        }
+
+        void SetInnerRadius()
+        {
+            var sin = Mathf.Sin(180 - BalanceParameters.GetOrbitEnterMaxValidAngle());
+            //TODO: fix rads
+            rads[0] = rads[1] * sin;
         }
 
         void SetColliderRadius()

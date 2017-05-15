@@ -93,5 +93,50 @@ namespace Catopus.Quest
                 return Instance.QuestCases[questId][pageId];
             return null;
         }
+
+        /// <summary>
+        /// Returns one of posible situations after player's answer counting diplomacy and planet level
+        /// </summary>
+        /// <param name="questId"></param>
+        /// <param name="answerId">answer that player gave</param>
+        /// <returns></returns>
+        public static QuestPage GetAnswerResult(int questId, int answerId)
+        {
+            var a = GetQuestPage(questId, answerId);
+            if (a.Cases.Count ==0)
+            {
+                Debug.LogError(string.Format("No cases for this answer. QuestId = {0}, AnswerId = {1} ", questId, answerId));
+                return null;
+            }
+
+            int good, neutral, bad;
+
+            //TODO: remake when improving quest engine
+            BalanceParameters.GetBalancedDialogCasesProbability(out good, out neutral, out bad);
+            
+            //TODO : make it class field, not global
+            Dictionary<int, int> AnswerProbabilitySum = new Dictionary<int, int>();
+            Debug.Log("Balanced diplomacy is " + BalanceParameters.GetBalancedDiplomacy());
+
+            int sum = 0;
+            foreach (var c in a.Cases)
+            {
+                var qp = GetQuestPage(questId, c);
+                sum += qp.DiplomacyType == DiplomacyResult.Good ? good :
+                        qp.DiplomacyType == DiplomacyResult.Bad ? bad :
+                        neutral;
+                AnswerProbabilitySum.Add(c, sum);
+                Debug.Log("dialog result sum prob   " + qp.DiplomacyType.ToString() + "   " + sum.ToString());
+            }
+            int p = r.Next(sum);
+            Debug.Log(p.ToString() + "   " + sum.ToString());
+            foreach (var ans in AnswerProbabilitySum)
+                if (ans.Value > p)
+                    return GetQuestPage(questId, ans.Key);
+            
+            //If accidentally found nothing, return just first case
+            return GetQuestPage(questId, a.Cases[0]);
+        }
+
     }
 }

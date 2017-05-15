@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using Catopus.Battle;
 using Catopus.UI;
+using Catopus.ButtonInput;
+using VGF;
 
 namespace Catopus
 {
@@ -12,13 +14,7 @@ namespace Catopus
         public static GameState State = GameState.Space;
 
         public static IBattleController BattleController = new BattleController();
-
-
-        #region planet functions, maybe put them in planet
-
-
-        #endregion
-
+        
         public static void TryStartQuest()
         {
             if (State != GameState.Space)
@@ -36,18 +32,28 @@ namespace Catopus
             SubscribeOnUIEvents();
             SubscribeOnUIHotkeyEvents();
             SubscribeOnSpaceshipEvents();
+            SubscribeOnSaveLoadEvents();
         }
         #endregion
 
         #region subscribe on events
+        void SubscribeOnSaveLoadEvents()
+        {
+            UIController.OnLoadButtonPressed += Load;
+            UIController.OnRestartButtonPressed += LoadInit;
+            UIController.OnSaveButtonPressed += Save;
+
+            InputController.OnLoad += Load;
+            InputController.OnLoadInit += LoadInit;
+            InputController.OnSave += Save;
+        }
+
         void SubscribeOnPlanetEvents()
         {
-            var planets = GameObject.FindObjectsOfType<Planet>();
-            foreach (var p in planets)
-            {
-                //Debug.Log("subscribe on planet event");
-                p.OnConflictAppeared += OnPlanetConflictAppearedHandler;
-            }
+            Planet.OnCurrentPlanetConflictAppeared += OnCurrentPlanetConflictAppearedHandler;
+            Planet.OnCurrentPlanetObserved += OnCurrentPlanetObservedHandler;
+            Planet.OnCurrentPlanetQuestStarted += OnCurrentPlanetStartQuestHandler;
+            Planet.OnPlanetResourcesExplored += OnPlanetResourcesExploredHandler;
         }
 
         void SubscribeOnBattleEvents()
@@ -68,10 +74,10 @@ namespace Catopus
 
         void SubscribeOnUIHotkeyEvents()
         {
-            ButtonInput.InputController.OnAccelerateButtonDown += OnTryLeavePlanetHandler;
+            InputController.OnAccelerateButtonDown += OnTryLeavePlanetHandler;
             UIController.OnTryLeavePlanet += OnTryLeavePlanetHandler;
 
-            ButtonInput.InputController.OnGoToNearestPlanetButtonDown += OnTryGoToNearestPlanetHandler;
+            InputController.OnGoToNearestPlanetButtonDown += OnTryGoToNearestPlanetHandler;
             UIController.OnTryGoToNearestPlanet += OnTryGoToNearestPlanetHandler;
         }
 
@@ -86,14 +92,20 @@ namespace Catopus
 
         void OnTryLeavePlanetHandler()
         {
+            if (!(Spaceship.Instance.State == SpaceShipState.OnOrbit
+                || Spaceship.Instance.State == SpaceShipState.SettingOnOrbit))
+                return;
+
             int fuel = BalanceParameters.GetFuelForAcceleration();
             if (PlayerController.Instance.NotEnoughFuel(fuel))
                 return;
-            if (Spaceship.Instance.TryAccelerate())
-            {
-                PlayerController.Instance.TryTakeFuel(fuel);
-                UIController.UpdateShipInfo();
-            }
+
+            Spaceship.Instance.Accelerate();
+            //TODO: Create a function which calls GameOver if TryTakeFuel returns false
+            //and use that function everywhere
+            PlayerController.Instance.TryTakeFuel(fuel);
+            UIController.OnCurrentPlanetLeft();
+            //UIController.UpdateShipInfo();
         }
 
         void OnTryGoToNearestPlanetHandler()
@@ -139,7 +151,6 @@ namespace Catopus
                 return;
 
             p.OnSpaceshipOnOrbit();
-            //Update UI only after observation
             UIController.OnSpaceshipOnOrbit();
         }
 
@@ -172,20 +183,44 @@ namespace Catopus
 
         #region observe planet function
 
+        void OnTryObservePlanetHandler()
+        {
+            if (Planet.Current.Visited)
+            {
+                Debug.LogError("WTF trying to visit already visited planet");
+                return;
+            }
+
+            int fuel = BalanceParameters.GetFuelForGoingToNearestPlanet();
+            if (PlayerController.Instance.NotEnoughFuel(fuel))
+                return;
+            //TODO: if not enough fuel that gameover
+            PlayerController.Instance.TryTakeFuel(fuel);
+            UIController.UpdateShipInfo();
+            Planet.Current.VisitPlanet();
+        }
+
         void OnPlanetObserveStartedHandler()
         {
 
         }
 
-        void OnPlanetObservedHandler()
+        void OnCurrentPlanetObservedHandler()
         {
-
+            //Update UI only after observation
+            UIController.OnSpaceshipOnOrbit();
         }
 
-        void OnPlanetConflictAppearedHandler(Planet p)
+        void OnPlanetResourcesExploredHandler(Reward reward)
         {
-            Debug.Log("Start battle: planet level is " + p.Level.ToString());
-            BattleController.StartBattle(p.Level, BattlefieldType.Planet);
+            PlayerController.Instance.ApplyReward(reward);
+            UIController.ShowReward(reward);
+        }
+
+        void OnCurrentPlanetConflictAppearedHandler()
+        {
+            //Debug.Log("Start battle: planet level is " + p.Level.ToString());
+            BattleController.StartBattle(Planet.Current.Level, BattlefieldType.Planet);
             //Debug.Log("sbhe-----");
         }
         #endregion
@@ -202,7 +237,7 @@ namespace Catopus
 
         #region unsorted UI command functions        
 
-        void OnExplorePlanetForResourcesFinishedHandler()
+        void OnExplorationResultFormClosed()
         {
 
         }
@@ -247,6 +282,34 @@ namespace Catopus
         void OnLoseSpaceshipBattleHandler()
         {
 
+        }
+
+        #endregion
+
+        #region quest functions
+
+        void OnCurrentPlanetStartQuestHandler()
+        {
+            UIController.ShowQuest(Planet.Current.QuestId);
+        }
+
+        #endregion
+
+        #region save load functions
+
+        void Load()
+        {
+            SaveLoadBehaviour.LoadAll();
+        }
+
+        void LoadInit()
+        {
+            SaveLoadBehaviour.LoadInitAll();
+        }
+
+        public virtual void Save()
+        {
+            SaveLoadBehaviour.SaveAll();
         }
 
         #endregion

@@ -54,6 +54,7 @@ namespace Catopus.UI
 
 
             var a = answers[answerId];
+            /*
             if (a == null)
                 return;
             if (a.Cases == null || a.Cases.Count == 0)
@@ -61,12 +62,14 @@ namespace Catopus.UI
             int caseId = a.Cases[r.Next(a.Cases.Count)];
 
             var q = QuestProcessor.GetQuestPage(currentQuestId, caseId);
-
+            */
+            //TODO stupid to kep all answers as quest pages and than use only ids
+            var q = QuestProcessor.GetAnswerResult(currentQuestId, answers[answerId].Id);
             if (q.IsEndPage)
             {
-                if (!q.Reward.IsEmpty)
-                    PlayerController.Instance.ApplyReward(q.Reward);
-                UIController.ShowQuestResult(q.Reward, q.Text);
+                var reward = BalanceParameters.GetBalancedReward(q.Reward);
+                PlayerController.Instance.ApplyReward(reward);
+                UIController.ShowQuestResult(reward, q.Text);
                 gameObject.SetActive(false);
                 return;
             }

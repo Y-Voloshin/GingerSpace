@@ -8,9 +8,11 @@ using UnityEngine;
 namespace VGF
 {
     /// <summary>
-    /// Interface for classes supporting save/load their states
+    /// Interface for classes supporting save/load their states.
+    /// It's obsolete case I couldn't make functions protected.
+    /// So I created an abstract class SaveLoadBehaviour.
     /// </summary>
-    public interface ISaveLoad
+    interface ISaveLoad
     {
         /// <summary>
         /// Rewrite last saved state

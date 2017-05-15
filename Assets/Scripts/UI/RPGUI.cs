@@ -9,20 +9,13 @@ namespace Catopus.UI
     {
 
         [SerializeField]
-        Text Expa,
-        Fuel,
+        LabelValueGroup Expa;
+        [SerializeField]
+        RPGLabelValueGroup Fuel,
         Strength,
         Exploration,
         Diplomacy,
         Management;
-
-        [SerializeField]
-        Button
-        FuelButton,
-        StrengthButton,
-        ExplorationButton,
-        DiplomacyButton,
-        ManagementButton;
 
         // Use this for initialization
         void Start()
@@ -43,19 +36,27 @@ namespace Catopus.UI
 
         void UpdateView()
         {
-            Expa.text = PlayerController.Instance.ExperiencePoints.ToString();
-            Fuel.text = PlayerController.Instance.FuelMax.ToString();
-            Strength.text = PlayerController.Instance.StrengthCurrent.ToString();
-            Exploration.text = PlayerController.Instance.ExplorationCurrent.ToString();
-            Diplomacy.text = PlayerController.Instance.DiplomacyCurrent.ToString();
-            Management.text = PlayerController.Instance.ManagementCurrent.ToString();
+            if (PlayerController.Instance == null)
+            {
+                return;
+            }
 
             bool canImprove = PlayerController.Instance.ExperiencePoints > 0;
-            FuelButton.gameObject.SetActive(canImprove);
-            StrengthButton.gameObject.SetActive(canImprove);
-            ExplorationButton.gameObject.SetActive(canImprove);
-            ManagementButton.gameObject.SetActive(canImprove);
-            DiplomacyButton.gameObject.SetActive(canImprove);
+
+            /*
+            Expa.SetValueSafe(PlayerController.Instance.ExperiencePoints);
+            Fuel.SetValueSafe(PlayerController.Instance.FuelMax, canImprove);
+            Strength.SetValueSafe(PlayerController.Instance.StrengthCurrent, canImprove);
+            Exploration.SetValueSafe(PlayerController.Instance.ExplorationCurrent, canImprove);
+            Diplomacy.SetValueSafe(PlayerController.Instance.DiplomacyCurrent, canImprove);
+            Management.SetValueSafe(PlayerController.Instance.ManagementCurrent, canImprove);
+            */
+            Expa.SetValueSafe(PlayerController.Instance.ExperiencePoints);
+            Fuel.SetValueSafe(PlayerController.Instance.FuelMax, canImprove);
+            Strength.SetValueSafe(BalanceParameters.GetBalancedStrength(), canImprove);
+            Exploration.SetValueSafe(BalanceParameters.GetBalancedExploration(), canImprove);
+            Diplomacy.SetValueSafe(BalanceParameters.GetBalancedDiplomacy(), canImprove);
+            Management.SetValueSafe(PlayerController.Instance.ManagementCurrent, canImprove);
         }
 
 

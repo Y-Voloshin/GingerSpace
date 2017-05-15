@@ -9,15 +9,20 @@ namespace Catopus.UI
     public class CurrentPlanetInfo : MonoBehaviour
     {
         [SerializeField]
-        Text VisitedValue,
+        Text VisitedValue, //TODO: Update everything after visit
             LevelValue,
             ResourcesValue,
             PopulationValue;
+
+        [SerializeField]
+        GameObject ExplorePlanetButton;
 
         GameObject go;
 
         public void Hide()
         {
+            if (go == null)
+                go = gameObject;
             go.SetActive(false);
         }
 
@@ -32,10 +37,25 @@ namespace Catopus.UI
         public void UpdateInfo()
         {
             var p = Planet.Current;
-            VisitedValue.SetHasNoUnknown(true, p.Visited);
+            ExplorePlanetButton.TrySetActive(!p.Visited);
+            VisitedValue.SetYesNoUnknown(true, p.Visited);
             LevelValue.SetIntUnknown(p.LevelObserved, p.Level);
+
             ResourcesValue.SetHasNoUnknown(p.ResourcesObserved, p.HasResources);
             PopulationValue.SetHasNoUnknown(p.PopulationObserved, p.HasPopulation);
+
+            //TODO: remake texts for LabelValueGroups
+            /*
+            if (p.Visited)
+            {
+                //ResourcesValue.
+            }
+            else
+            {
+                ResourcesValue.SetHasNoUnknown(p.ResourcesObserved, p.HasResources);
+                PopulationValue.SetHasNoUnknown(p.PopulationObserved, p.HasPopulation);
+            }
+            */
         }
     }
 

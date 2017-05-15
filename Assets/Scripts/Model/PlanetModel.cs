@@ -54,6 +54,10 @@ namespace Catopus.Model
             Observed = model.Observed;
             Visited = model.Visited;
 
+            LevelObserved = model.LevelObserved;
+            PopulationObserved = model.PopulationObserved;
+            ResourcesObserved = model.ResourcesObserved;
+
             Level = model.Level;            
             HasPopulation = model.HasPopulation;
             HasResources = model.HasResources;

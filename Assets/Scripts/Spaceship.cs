@@ -13,6 +13,7 @@ namespace Catopus
         #region events
         public event Action<Planet> OnPlanetEnteredValidAngle,
                                     OnPlanetEnteredInvalidAngle;
+        public event Action OnCurrentPlanetLeft;
         #endregion
 
 
@@ -86,10 +87,15 @@ namespace Catopus
                 */
 
             if (angle > 140)
+            {
                 OnPlanetEnteredInvalidAngle.CallEventIfNotNull(planet);
+                //TODO: make it as callback from GameManager
+                DragToPlanet(planetCollider.transform);
+            }
             else
             {
                 OnPlanetEnteredValidAngle.CallEventIfNotNull(planet);
+                //TODO: make it as callback from GameManager
                 StartSetToOrbit(planet.myTransform);
             }
         }
@@ -169,16 +175,13 @@ namespace Catopus
 
         #endregion
 
-        public bool TryAccelerate()
-        {
-            if (CurrentModel.State != SpaceShipState.OnOrbit)
-                return false;
-
-            //TODO: remake to planet.current
-            if (planet != null)
-                    planet.LeavePlanet();
+        public void Accelerate()
+        {            
+            /*
+            if (Planet.Current != null)
+                Planet.Current.LeavePlanet(); //TODO: put LeavePlanet logic in Spaceship
+                */
             CurrentModel.State = SpaceShipState.Idle;
-            return true;
         }
 
         public bool TryGoToNearestPlanet()
@@ -195,7 +198,7 @@ namespace Catopus
             return true;
         }
 
-        public override void Init()
+        protected override void Init()
         {
             //print(CurrentModel);
             //print(myTransform);
@@ -205,19 +208,19 @@ namespace Catopus
             CurrentModel.SetTransformParameters(myTransform);
         }
 
-        public override void Save()
+        protected override void Save()
         {
             CurrentModel.SetTransformParameters(myTransform);
             base.Save();
         }
 
-        public override void Load()
+        protected override void Load()
         {
             base.Load();
             ResetToCurrent();
         }
 
-        public override void LoadInit()
+        protected override void LoadInit()
         {
             base.LoadInit();
             ResetToCurrent();

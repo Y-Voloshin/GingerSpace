@@ -5,7 +5,7 @@ using UnityEngine;
 //using Catopus.UI;
 using VGF;
 using Catopus.Model;
-using Catopus.UI;
+//using Catopus.UI;
 
 namespace Catopus
 {
@@ -49,17 +49,12 @@ namespace Catopus
         public bool RandomizeParameters = true;
 
         #region events
-        public static event Action OnCurrentPlanetObserved;
+        public static event Action OnCurrentPlanetObserved,
+            OnCurrentPlanetQuestStarted,
+            OnCurrentPlanetConflictAppeared;
+        public static event Action<Reward> OnPlanetResourcesExplored;
 
-        public event Action<Planet> OnConflictAppeared;
-
-        #endregion
-
-
-        #region check point
-
-        #endregion
-
+        #endregion        
 
         //TODO: refactor all planets list
         protected override void Awake()
@@ -120,24 +115,18 @@ namespace Catopus
         }
 
         public void VisitPlanet()
-        {
-            //TODO: put this three lines of code code somewhere else
-            if (!PlayerController.Instance.TryTakeFuel(1))
-                return;
-            UIController.UpdateShipInfo();
-
+        {            
             if (Visited)
             {
                 Debug.LogError("Trying visit planet which is already visited");
                 return;
             }
             CurrentModel.Visited = true;
-
+            ObserveEverything();
 
             if (HasQuest)
             {
-                UIController.ShowQuest(QuestId);
-
+                OnCurrentPlanetQuestStarted.CallEventIfNotNull();
             }
             else
             {
@@ -166,27 +155,28 @@ namespace Catopus
 
             //TODO: not parameter, planet.Current instead
             if (conflict)
-                OnConflictAppeared.CallEventIfNotNull(this);
+                OnCurrentPlanetConflictAppeared.CallEventIfNotNull();
         }
 
         public void ExploreForResoures()
         {
             //It can be called after battle by external class
+            //TODO: But why do we put reward in current model?
             CurrentModel.Reward = GenerateResources();
-            if (!CurrentModel.Reward.IsEmpty)
-                PlayerController.Instance.ApplyReward(CurrentModel.Reward);//TODO: remove all references on player controller
 
-            UIController.ShowReward(CurrentModel.Reward);
+            OnPlanetResourcesExplored.CallEventIfNotNull(CurrentModel.Reward);
+        }
+
+        void ObserveEverything()
+        {
+            CurrentModel.LevelObserved = true;
+            CurrentModel.ResourcesObserved = true;
+            CurrentModel.PopulationObserved = true;
+            OnCurrentPlanetObserved.CallEventIfNotNull();
         }
 
         #region move to planet functions
-
-        public void LeavePlanet()
-        {
-            UIController.LeavePlanet(this);
-            Current = null;
-        }
-
+        
         public static Planet GetClosest()
         {
             if (All == null || All.Length == 0)
@@ -212,7 +202,7 @@ namespace Catopus
             var v = ship.position;
             float dist = Vector3.Distance(transform.position, ship.position);
             float angle = Mathf.Asin(Radius / dist) * 180 / Mathf.PI;
-            Debug.Log(" == angle : " + angle.ToString() + "  " + Radius.ToString());
+            //Debug.Log(" == angle : " + angle.ToString() + "  " + Radius.ToString());
             Vector3 shipToPlanetV3 = transform.position - ship.position;
             float upAngle = Vector3.Angle(shipToPlanetV3, ship.up);
             if (upAngle < 90 || upAngle > 270)
@@ -222,7 +212,7 @@ namespace Catopus
             //Debug.Log(angle);
 
             angle += rotV3.z;
-            Debug.Log(" == angle + rotV3 " + angle.ToString());
+            //Debug.Log(" == angle + rotV3 " + angle.ToString());
             ship.Rotate(Vector3.forward, angle);
         }
 
