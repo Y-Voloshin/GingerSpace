@@ -38,11 +38,19 @@ namespace Catopus
             }
         }
 
+        void Awake()
+        {
+            SetColliderRadius();
+            SetInnerRadius();
+        }
+
+        /*
         void Start()
         {
             SetColliderRadius();
             SetInnerRadius();
         }
+        */
 
         void SetInnerRadius()
         {

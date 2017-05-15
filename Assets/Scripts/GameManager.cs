@@ -146,7 +146,7 @@ namespace Catopus
 
         void OnPlanetEnteredValidAngleHandler(Planet p)
         {
-            Debug.Log(p);
+            //Debug.Log(p);
             if (p == null)
                 return;
 
