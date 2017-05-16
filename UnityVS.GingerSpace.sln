@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.GingerSpace.Plugins", "UnityVS.GingerSpace.Plugins.csproj", "{68DC9118-EB8D-59D7-B271-C72221C248E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.GingerSpace", "UnityVS.GingerSpace.csproj", "{86EFB16B-FFE6-A61D-B6E6-ECC8A6830444}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.GingerSpace.Editor.Plugins", "UnityVS.GingerSpace.Editor.Plugins.csproj", "{F9AD9FE4-E0B2-CC2D-27F5-57D60F70E0A8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{68DC9118-EB8D-59D7-B271-C72221C248E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68DC9118-EB8D-59D7-B271-C72221C248E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68DC9118-EB8D-59D7-B271-C72221C248E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68DC9118-EB8D-59D7-B271-C72221C248E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86EFB16B-FFE6-A61D-B6E6-ECC8A6830444}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86EFB16B-FFE6-A61D-B6E6-ECC8A6830444}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86EFB16B-FFE6-A61D-B6E6-ECC8A6830444}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86EFB16B-FFE6-A61D-B6E6-ECC8A6830444}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9AD9FE4-E0B2-CC2D-27F5-57D60F70E0A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9AD9FE4-E0B2-CC2D-27F5-57D60F70E0A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9AD9FE4-E0B2-CC2D-27F5-57D60F70E0A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9AD9FE4-E0B2-CC2D-27F5-57D60F70E0A8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
