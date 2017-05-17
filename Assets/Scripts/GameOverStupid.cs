@@ -17,8 +17,7 @@ namespace Catopus.UI
             caseBreakdown = "Вы не справились с управлением и врезались в планету",
             caseOutOfFuel = "В жизни поправимо всё. Всё корме пустого топливного бака в открытом космосе.";
 
-        Planet[] planets;
-
+        Planet[] planets;        
 
         // Use this for initialization
         void Start()
@@ -63,12 +62,6 @@ namespace Catopus.UI
                 GameOverWindow.SetActive(true);
                 GameOverCase.text = caseBreakdown;
             }
-        }
-
-        public void Restart()
-        {
-            //
-            SceneManager.LoadScene(0);
         }
 
         public void Exit()

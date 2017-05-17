@@ -21,7 +21,8 @@ namespace Catopus
         Dictionary<string, Action<Collider>> TagActions = new Dictionary<string, Action<Collider>>();
 
         Transform planetTransform;
-        Planet planet;
+        //Planet planet;
+        float SpeedMultiplier = 1;
 
         public SpaceShipState State { get { return CurrentModel.State; } }
 
@@ -43,14 +44,14 @@ namespace Catopus
             switch (CurrentModel.State)
             {
                 case SpaceShipState.Idle:
-                    myTransform.Translate(Vector3.right * CurrentModel.Speed * Time.deltaTime);
+                    myTransform.Translate(Vector3.right * CurrentModel.Speed * Time.deltaTime * SpeedMultiplier);
                     break;
                 case SpaceShipState.SettingOnOrbit:
-                    myTransform.Translate(Vector3.right * CurrentModel.Speed * Time.deltaTime);
+                    myTransform.Translate(Vector3.right * CurrentModel.Speed * Time.deltaTime * SpeedMultiplier);
                     CheckSettingOnOrbit();
                     break;
                 case SpaceShipState.OnOrbit:
-                    myTransform.RotateAround(planetTransform.position, Vector3.forward, CurrentModel.AngularSpeed * Time.deltaTime);
+                    myTransform.RotateAround(planetTransform.position, Vector3.forward, CurrentModel.AngularSpeed * Time.deltaTime * SpeedMultiplier);
                     break;
                 case SpaceShipState.Falling:
                     FallOnPlanet();
@@ -76,7 +77,7 @@ namespace Catopus
             Vector3 a = myTransform.right;
             Vector3 b = myTransform.position - planetCollider.transform.position;
 
-            planet = planetCollider.GetComponent<Planet>();
+            var planet = planetCollider.GetComponent<Planet>();
             this.planetTransform = planetCollider.transform;
 
             /*
@@ -103,7 +104,7 @@ namespace Catopus
         void OnFinishEnter(Collider finish)
         {
             finish.GetComponent<Finish>().ExecuteFinish();
-            CurrentModel.State = SpaceShipState.Dead;
+            //CurrentModel.State = SpaceShipState.Dead;
         }
 
         void DragToPlanet(Transform planet)
@@ -174,6 +175,11 @@ namespace Catopus
         }
 
         #endregion
+
+        public void SetSpeedMultiplier(float m)
+        {
+            SpeedMultiplier = m;
+        }
 
         public void Accelerate()
         {            

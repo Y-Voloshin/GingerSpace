@@ -117,6 +117,7 @@
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
     <Compile Include="Assets\VGF\Scripts\AbstractModel.cs" />
     <Compile Include="Assets\VGF\Scripts\CachedBehaviour.cs" />
+    <Compile Include="Assets\VGF\Scripts\Debug\DebugLabel.cs" />
     <Compile Include="Assets\VGF\Scripts\DotNetExtensions\EventExtensions.cs" />
     <Compile Include="Assets\VGF\Scripts\GenericModelBehaviour.cs" />
     <Compile Include="Assets\VGF\Scripts\ISaveLoad.cs" />

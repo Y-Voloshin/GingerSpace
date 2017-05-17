@@ -24,6 +24,6 @@ public class CameraMove : MonoBehaviour {
             Catopus.Planet.Current.myTransform.position : ship.position;
         targetPos.z = myTransform.position.z;
 
-        myTransform.position = Vector3.Lerp(myTransform.position, targetPos, Time.deltaTime * 2);
+        myTransform.position = Vector3.Lerp(myTransform.position, targetPos, Time.deltaTime);
 	}
 }

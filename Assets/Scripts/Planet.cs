@@ -156,6 +156,8 @@ namespace Catopus
             //TODO: not parameter, planet.Current instead
             if (conflict)
                 OnCurrentPlanetConflictAppeared.CallEventIfNotNull();
+            else
+                ExploreForResoures();
         }
 
         public void ExploreForResoures()

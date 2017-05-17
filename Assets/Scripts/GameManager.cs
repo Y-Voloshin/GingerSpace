@@ -79,6 +79,9 @@ namespace Catopus
 
             InputController.OnGoToNearestPlanetButtonDown += OnTryGoToNearestPlanetHandler;
             UIController.OnTryGoToNearestPlanet += OnTryGoToNearestPlanetHandler;
+
+            InputController.OnLMBDown += OnLMBDownHandler;
+            InputController.OnLMBUp += OnLMBUpHandler;
         }
 
         #endregion
@@ -118,6 +121,39 @@ namespace Catopus
                 PlayerController.Instance.TryTakeFuel(fuel);
                 UIController.UpdateShipInfo();
             }
+        }
+
+        void OnLMBDownHandler()
+        {
+            if (Spaceship.Instance.State == SpaceShipState.OnOrbit
+                || Spaceship.Instance.State == SpaceShipState.SettingOnOrbit)
+            {
+                ShipSlowDown();
+            }
+            //else
+            //    OnTryGoToNearestPlanetHandler();
+        }
+
+        void OnLMBUpHandler()
+        {
+            if (Spaceship.Instance.State == SpaceShipState.OnOrbit
+                || Spaceship.Instance.State == SpaceShipState.SettingOnOrbit)
+            {
+                ShipSpeedNormal();
+                OnTryLeavePlanetHandler();
+            }
+            else
+                OnTryGoToNearestPlanetHandler();
+        }
+
+        void ShipSlowDown()
+        {
+            Spaceship.Instance.SetSpeedMultiplier(0.3f);
+        }
+
+        void ShipSpeedNormal()
+        {
+            Spaceship.Instance.SetSpeedMultiplier(1);
         }
 
         #endregion
