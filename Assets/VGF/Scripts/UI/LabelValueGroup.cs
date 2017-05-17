@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using VGF;
-using VGF.UintyUI;
 
-namespace Catopus.UI
+namespace VGF.UintyUI
 {
     public class LabelValueGroup : CachedBehaviour
     {

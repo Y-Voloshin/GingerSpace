@@ -2,6 +2,13 @@
 
 namespace Catopus
 {
+    /// <summary>
+    /// Container for all the balance in game.
+    /// <para>How strong does management influence on diplomaty?</para>
+    /// <para>How much fuel do you need to observe a planet?</para>
+    /// <para>At what angle can u enter a planet orbit?</para>
+    /// <para>etc</para>
+    /// </summary>
     public class BalanceParameters
     {
         //TODO: balance listens to parameters change and updates balanced values instead of calculating em each time
@@ -12,28 +19,38 @@ namespace Catopus
         public readonly float OrbitEnterMaxValidAngle;
 
         /// <summary>
-        /// Количество добавочных очков силы на одно очко менеджмента
+        /// Strength: Quantity of additional points for one management point
+        /// <para>Количество добавочных очков силы на одно очко менеджмента</para>
         /// </summary>
         public readonly float StrengthManagementFactor;
         /// <summary>
-        /// Количество добавочных очков дипломатии на одно очко менеджмента
+        /// Diplomacy: Quantity of additional points for one management point
+        /// <para>Количество добавочных очков дипломатии на одно очко менеджмента</para> 
         /// </summary>
         public readonly float DiplomacyManagementFactor;
+
         /// <summary>
-        /// Количество добавочных очков исследования на одно очко менеджмента
+        /// Exploration: Quantity of additional points for one management point
+        /// <para>Количество добавочных очков исследования на одно очко менеджмента</para>
         /// </summary>
         public readonly float ExplorationManagementFactor;
 
         /// <summary>
-        /// Доля добавочных очков опыта на одно очко менеджмента. 
-        /// Базовый опыт 4, 3 очка менеджмента, коэффициент 0.2: 4 + 4*3*0.2 = 4 + 2.4 = 4 + 2 = 6
+        /// Exploration: Piece of additional points for one management point
+        /// <para>Basic xp is 4, management is 3, multiplier 0.2. Result: 4 (1 + 3 * 0.2) = 4 * 1.6 = 6.4 = 6</para>
+        /// <para>Доля добавочных очков опыта на одно очко менеджмента. 
+        /// <para>Базовый опыт 4, 3 очка менеджмента, коэффициент 0.2: 4 + 4*3*0.2 = 4 + 2.4 = 4 + 2 = 6</para>
+        /// </para>
         /// </summary>
         public readonly float ExperienseManagementFactor;
 
         /// <summary>
         /// Frequency of planets with no quest
+        /// <para>Частота планет без квестов</para>
         /// </summary>
         readonly float NoQuestProbablilityWeight;
+
+        //TODO: add military planets probability
 
         public readonly int FuelForAcceleration;
         public readonly int FuelForGoingToNearestPlanet; //maybe rename to SetCourse
@@ -43,6 +60,9 @@ namespace Catopus
         {
             //TODO: load balance from settings file
 
+            //Sum is 0.9. Not 1. Because for experience the effect is multiplicative, not addictive.
+            //So experience effect is 0.1 instead of 0.2
+            //We still can think that sum is 1, so one management point is equal to other parameters' points
             //В сумме факторы дают .9. На опыт поменьше. Потому что там мультипликативный эффект.
             StrengthManagementFactor = 0.3f;
             DiplomacyManagementFactor = 0.1f;
@@ -56,9 +76,10 @@ namespace Catopus
 
             OrbitEnterMaxValidAngle = 140;
         }
-        
+
         /// <summary>
-        /// Сила, пересчитанная с учетом менеджмента
+        /// Strength, recalculated with management impact
+        /// <para>Сила, пересчитанная с учетом менеджмента</para>
         /// </summary>
         /// <returns></returns>
         public static int GetBalancedStrength()
@@ -69,7 +90,8 @@ namespace Catopus
         }
 
         /// <summary>
-        /// Дипломатия, пересчитанная с учетом менеджмента
+        /// Diplomacy, recalculated with management impact
+        /// <para>Дипломатия, пересчитанная с учетом менеджмента</para>
         /// </summary>
         /// <returns></returns>
         public static int GetBalancedDiplomacy()
@@ -80,7 +102,8 @@ namespace Catopus
         }
 
         /// <summary>
-        /// Исследование, пересчитанное с учетом менеджмента
+        /// Exploration, recalculated with management impact
+        /// <para>Исследование, пересчитанное с учетом менеджмента</para>
         /// </summary>
         /// <returns></returns>
         public static int GetBalancedExploration()

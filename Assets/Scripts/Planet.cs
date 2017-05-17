@@ -22,7 +22,7 @@ namespace Catopus
         #region common parameters
         public int Level { get { return CurrentModel.Level; } }
         /// <summary>
-        /// The observed. Была ли планета найдена
+        /// The observed. Was the planet observed?
         /// </summary>
         public bool Observed { get { return CurrentModel.Observed; } }
         public bool LevelObserved { get { return CurrentModel.LevelObserved; } }
@@ -31,7 +31,7 @@ namespace Catopus
 
 
         /// <summary>
-        /// The visited. Была ли планета посещена? Планету можно посетить один раз.
+        /// The visited. Was the planet visited? A planet can be visited only once (for now)
         /// </summary>
         public bool Visited { get { return CurrentModel.Visited; } }
         public bool HasPopulation { get { return CurrentModel.HasPopulation; } }
@@ -130,8 +130,8 @@ namespace Catopus
             }
             else
             {
-                //Если есть люди - шанс начать войну
-                //Иначе - просто добываем ресурсы
+                //If has population - a chance of fight
+                //Else just gather  resources
                 if (HasPopulation)
                 {
                     //for (int i = 0; i < 50; i++)
@@ -144,7 +144,7 @@ namespace Catopus
             }
         }
 
-        void InteractWithPopulation()
+        void InteractWithPopulation() 
         {
             //conflict chance is 50/50
             //And each diplomacy point increases pacific chance

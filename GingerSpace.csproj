@@ -109,22 +109,20 @@
     <Compile Include="Assets\Scripts\Test\Orbits.cs" />
     <Compile Include="Assets\Scripts\UI\BattleResultForm.cs" />
     <Compile Include="Assets\Scripts\UI\CurrentPlanetInfo.cs" />
-    <Compile Include="Assets\Scripts\UI\LabelValueGroup.cs" />
     <Compile Include="Assets\Scripts\UI\PlanetExploreResult.cs" />
-    <Compile Include="Assets\Scripts\UI\QuestDialogueOption.cs" />
     <Compile Include="Assets\Scripts\UI\QuestPanel.cs" />
     <Compile Include="Assets\Scripts\UI\RPGLabelValueGroup.cs" />
     <Compile Include="Assets\Scripts\UI\RPGUI.cs" />
     <Compile Include="Assets\Scripts\UI\ShipInfoUI.cs" />
-    <Compile Include="Assets\Scripts\UI\SpaceshipBattleResultForm.cs" />
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
-    <Compile Include="Assets\VGF\AbstractModel.cs" />
-    <Compile Include="Assets\VGF\CachedBehaviour.cs" />
-    <Compile Include="Assets\VGF\DotNetExtensions\EventExtensions.cs" />
-    <Compile Include="Assets\VGF\GenericModelBehaviour.cs" />
-    <Compile Include="Assets\VGF\ISaveLoad.cs" />
-    <Compile Include="Assets\VGF\SaveLoadBehaviour.cs" />
-    <Compile Include="Assets\VGF\UI\UnityUIExtensions.cs" />
+    <Compile Include="Assets\VGF\Scripts\AbstractModel.cs" />
+    <Compile Include="Assets\VGF\Scripts\CachedBehaviour.cs" />
+    <Compile Include="Assets\VGF\Scripts\DotNetExtensions\EventExtensions.cs" />
+    <Compile Include="Assets\VGF\Scripts\GenericModelBehaviour.cs" />
+    <Compile Include="Assets\VGF\Scripts\ISaveLoad.cs" />
+    <Compile Include="Assets\VGF\Scripts\SaveLoadBehaviour.cs" />
+    <Compile Include="Assets\VGF\Scripts\UI\LabelValueGroup.cs" />
+    <Compile Include="Assets\VGF\Scripts\UI\UnityUIExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Resources\Quest0.txt" />

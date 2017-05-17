@@ -8,14 +8,15 @@ namespace Catopus.Model
     [System.Serializable]
     public class PlayerModel : AbstractModel<PlayerModel>
     {
+        //TODO: create a class RPGParameter {int CurrentValue, int MinValue, int MaxValue, bool LimitedMin, bool LimitedMax}
         public int FuelMax = 10,
                 FuelCurrent = 10,
 
-                //Хоть что-то игрок всегда может сделать, так что сила у него минимум 1
+                //Player always can do at least something. Player always have a chance to fight back. So StrengthMin is 1.
                 StrengthMin = 1,
                 StrengthCurrent,
 
-                DiplomacyMax,
+                DiplomacyMax, //Not used, remove later
                 DiplomacyCurrent,//Нет максимума и минимума
 
                 //Ну и поиск как и сила не может быть нулевой

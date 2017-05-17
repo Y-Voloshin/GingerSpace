@@ -10,8 +10,8 @@ namespace Catopus.UI
     public class QuestPanel : MonoBehaviour
     {
         static System.Random r = new System.Random();
-        [SerializeField]
-        QuestDialogueOption[] Options = new QuestDialogueOption[5];
+        //[SerializeField]
+        //QuestDialogueOption[] Options = new QuestDialogueOption[5];
 
         [SerializeField]
         Text NPCText;

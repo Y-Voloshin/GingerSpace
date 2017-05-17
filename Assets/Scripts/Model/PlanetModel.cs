@@ -14,11 +14,11 @@ namespace Catopus.Model
 
         public int Level = 1;
         /// <summary>
-        /// The observed. Была ли планета найдена
+        /// Was the planet observed?
         /// </summary>
         public bool Observed,
                 /// <summary>
-                /// The visited. Была ли планета посещена? Планету можно посетить один раз.
+                /// The visited. Was the planet visited? Now it can be visited only once
                 /// </summary>
                 Visited,
                     HasPopulation,
